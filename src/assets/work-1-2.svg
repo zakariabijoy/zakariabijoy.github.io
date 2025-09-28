@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#0f1413"/>
+  <rect x="60" y="80" width="680" height="360" rx="8" fill="#172322" stroke="#2b3938" stroke-width="6" />
+  <text x="80" y="140" fill="#c6a6ff" font-size="26">Project Mockup 1 - Secondary</text>
+</svg>
