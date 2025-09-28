@@ -1,0 +1,67 @@
+:host { display: block; }
+
+/* Animations */
+.profile-photo-container { animation: float 3s ease-in-out infinite; margin-top: -1.5rem; }
+
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+/* Stats styling: large numbers with labels underneath */
+.home-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; text-align: center; padding: 2rem 0; }
+.home-stats .stat-value { font-size: 2.5rem; font-weight: 800; }
+.home-stats .stat-label { font-size: 0.875rem; color: var(--muted); margin-top: 0.5rem; }
+
+@media (max-width: 767px) {
+  .home-stats { grid-template-columns: repeat(2, 1fr); }
+  .home-stats .stat-value { font-size: 2rem; }
+}
+
+/* Decorative rings around the profile photo */
+.profile-photo-container {
+  position: relative;
+}
+.profile-photo-container .ring {
+  position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+}
+.profile-photo-container .ring-1 {
+  width: calc(100% + 40px);
+  height: calc(100% + 40px);
+  top: -20px;
+  left: -20px;
+  animation: spin-slow 8s linear infinite;
+  background: conic-gradient(from 0deg, rgba(52,211,153,0.95) 0deg 18deg, transparent 18deg 36deg, rgba(52,211,153,0.95) 36deg 54deg, transparent 54deg 72deg, rgba(52,211,153,0.95) 72deg 90deg, transparent 90deg 108deg, rgba(52,211,153,0.95) 108deg 126deg, transparent 126deg 144deg, rgba(52,211,153,0.95) 144deg 162deg, transparent 162deg 180deg, rgba(52,211,153,0.95) 180deg 198deg, transparent 198deg 216deg, rgba(52,211,153,0.95) 216deg 234deg, transparent 234deg 252deg, rgba(52,211,153,0.95) 252deg 270deg, transparent 270deg 288deg, rgba(52,211,153,0.95) 288deg 306deg, transparent 306deg 324deg, rgba(52,211,153,0.95) 324deg 342deg, transparent 342deg 360deg);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black calc(100% - 6px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 6px), black calc(100% - 6px));
+}
+
+.profile-photo-container .ring-1::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.profile-photo-container .ring-2 {
+  width: calc(100% + 52px);
+  height: calc(100% + 52px);
+  top: -26px;
+  left: -26px;
+  border: 3px solid rgba(52,211,153,0.12);
+  box-shadow: 0 8px 30px rgba(52,211,153,0.06);
+  transform: rotate(25deg);
+  animation: spin-reverse 12s linear infinite;
+}
+.profile-photo-container .ring-3 {
+  width: calc(100% + 92px);
+  height: calc(100% + 92px);
+  top: -46px;
+  left: -46px;
+  border: 2px solid rgba(52,211,153,0.22);
+  opacity: 0.8;
+  animation: pulse 3.5s ease-in-out infinite;
+}
+
+@keyframes spin-slow { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@keyframes spin-reverse { from { transform: rotate(0deg);} to { transform: rotate(-360deg);} }
+@keyframes pulse { 0%,100% { transform: scale(1);} 50% { transform: scale(1.03); opacity: 0.6; } }

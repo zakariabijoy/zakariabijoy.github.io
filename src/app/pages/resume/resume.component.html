@@ -1,0 +1,95 @@
+<section class="py-16">
+  <div class="container">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+      <!-- Left nav -->
+      <aside class="md:col-span-4 lg:col-span-3">
+        <h2 class="text-4xl font-mono mb-4">Why hire me?</h2>
+        <p class="text-muted max-w-prose mb-6">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+
+        <nav class="flex flex-col gap-3 resume-nav">
+          <button (click)="setTab('experience')" [class.active]="activeTab() === 'experience'" class="nav-btn">Experience</button>
+          <button (click)="setTab('education')" [class.active]="activeTab() === 'education'" class="nav-btn">Education</button>
+          <button (click)="setTab('skills')" [class.active]="activeTab() === 'skills'" class="nav-btn">Skills</button>
+          <button (click)="setTab('about')" [class.active]="activeTab() === 'about'" class="nav-btn">About me</button>
+        </nav>
+      </aside>
+
+      <!-- Right content -->
+      <div class="md:col-span-8 lg:col-span-9">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h3 class="text-2xl font-mono">My {{ activeTab() === 'experience' ? 'experience' : (activeTab() === 'education' ? 'education' : (activeTab() === 'skills' ? 'skills' : 'about')) }}</h3>
+            <p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </div>
+          <div class="flex gap-3">
+            <a class="download-cv-btn inline-flex items-center gap-2 px-4 py-2 border border-brand-400 text-brand-400 rounded-md" href="/assets/Md_Zakaria_Masud_Resume.pdf" download>
+              <i class="pi pi-download"></i>
+              Download
+            </a>
+          </div>
+        </div>
+
+        <div class="resume-grid">
+          <!-- Experience / Education cards -->
+          <ng-container *ngIf="activeTab() === 'experience'">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+              <ng-container *ngFor="let item of experience">
+                <article class="card p-6 bg-panel rounded-md">
+                  <div class="flex items-start gap-4">
+                    <div class="text-accent text-sm font-medium">{{ item.date }}</div>
+                    <div>
+                      <h4 class="text-lg font-semibold">{{ item.title }}</h4>
+                      <div class="text-muted text-sm">{{ item.company }}</div>
+                      <ul class="mt-3 text-sm list-disc list-inside text-muted" *ngIf="item.bullets">
+                        <li *ngFor="let b of item.bullets">{{ b }}</li>
+                      </ul>
+                    </div>
+                  </div>
+                </article>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="activeTab() === 'education'">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
+              <ng-container *ngFor="let item of education">
+                <article class="card p-6 bg-panel rounded-md">
+                  <div class="flex items-start gap-4">
+                    <div class="text-accent text-sm font-medium">{{ item.date }}</div>
+                    <div>
+                      <h4 class="text-lg font-semibold">{{ item.title }}</h4>
+                      <div class="text-muted text-sm">{{ item.company }}</div>
+                    </div>
+                  </div>
+                </article>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <!-- Skills grid -->
+          <ng-container *ngIf="activeTab() === 'skills'">
+            <div class="grid grid-cols-3 sm:grid-cols-4 gap-6">
+              <ng-container *ngFor="let s of skills">
+                <div class="skill-card p-6 bg-panel rounded-md flex items-center justify-center">
+                  <div class="text-xl font-semibold">{{ s.title }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+
+          <!-- About grid -->
+          <ng-container *ngIf="activeTab() === 'about'">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <ng-container *ngFor="let a of about">
+                <div class="info-row p-4 bg-panel rounded-md flex justify-between">
+                  <div class="text-muted">{{ a.label }}</div>
+                  <div class="font-medium">{{ a.value }}</div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

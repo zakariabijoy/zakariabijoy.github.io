@@ -1,0 +1,49 @@
+.host { display: block; }
+
+:host { display: block; }
+
+.resume-nav .nav-btn {
+	background: rgba(255,255,255,0.02);
+	color: rgba(255,255,255,0.8);
+	padding: 0.75rem 1rem;
+	border-radius: 6px;
+	border: 1px solid rgba(255,255,255,0.03);
+	text-align: center;
+	font-weight: 600;
+	transition: all .18s ease;
+}
+.resume-nav .nav-btn.active {
+	background: linear-gradient(90deg, rgba(16,185,129,1), rgba(52,211,153,0.95));
+	color: #0b1120;
+	box-shadow: 0 6px 18px rgba(16,185,129,0.12);
+	transform: translateY(-1px);
+}
+.resume-nav .nav-btn:hover { transform: translateY(-1px); }
+
+.text-muted { color: rgba(255,255,255,0.45); }
+.text-accent { color: #22c55e; }
+
+.bg-panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); }
+.card { transition: transform .18s ease, box-shadow .18s ease; }
+.card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(2,6,23,0.5); }
+
+.skill-card { height: 84px; display:flex; align-items:center; justify-content:center; }
+
+.resume-grid { margin-top: 6px; }
+
+/* Custom scrollbar like screenshot */
+.resume-grid ::-webkit-scrollbar { width: 10px; height: 10px; }
+.resume-grid ::-webkit-scrollbar-track { background: transparent; }
+.resume-grid ::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.95); border-radius: 999px; border: 2px solid rgba(255,255,255,0.02); }
+
+/* info row */
+.info-row { display:flex; align-items:center; justify-content:space-between; }
+
+/* small responsive tweaks */
+@media (min-width: 768px) {
+	.resume-nav .nav-btn { text-align: left; padding-left: 1.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.card, .resume-nav .nav-btn { transition: none !important; }
+}

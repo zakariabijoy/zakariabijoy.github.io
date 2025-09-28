@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0b0f0e; /* deep greenish black */
+  --fg: #eafaf1; /* off-white */
+  --muted: #a3b7ae;
+  --brand-50: #ecfdf5;
+  --brand-100: #d1fae5;
+  --brand-200: #a7f3d0;
+  --brand-300: #6ee7b7;
+  --brand-400: #34d399;
+  --brand-500: #10b981;
+  --brand-600: #059669;
+  --brand-700: #047857;
+  --brand-800: #065f46;
+  --brand-900: #064e3b;
+}
+
+.dark {
+  --bg: #050807;
+  --fg: #e6f7ef;
+  --muted: #8ca59a;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  @apply bg-[color:var(--bg)] text-[color:var(--fg)] antialiased selection:bg-[color:var(--brand-400)] selection:text-black;
+}
+
+/***** Modern animated background (subtle, performant) *****/
+.bg-animated {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(60rem 40rem at 10% 10%, color-mix(in oklab, var(--brand-700) 12%, transparent), transparent 60%),
+              radial-gradient(50rem 30rem at 90% 20%, color-mix(in oklab, var(--brand-500) 10%, transparent), transparent 60%),
+              radial-gradient(40rem 30rem at 50% 100%, color-mix(in oklab, var(--brand-600) 12%, transparent), transparent 60%),
+              linear-gradient(180deg, color-mix(in oklab, #0b0f0e 92%, black), #0b0f0e 40%, #08110e 100%);
+  filter: saturate(1.05) contrast(1.02);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bg-animated::before {
+    content: '';
+    position: absolute;
+    inset: -20vmax;
+    background: conic-gradient(from 0deg, transparent, color-mix(in oklab, var(--brand-500) 8%, transparent), transparent 35%, color-mix(in oklab, var(--brand-400) 6%, transparent), transparent 70%);
+    animation: spin 40s linear infinite;
+    opacity: 0.4;
+    mix-blend-mode: overlay;
+  }
+  @keyframes spin {
+    to { transform: rotate(1turn); }
+  }
+}
+
+/***** Utility presets *****/
+.container {
+  @apply mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section-title {
+  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-[color:var(--fg)];
+}
+
+.section-subtitle {
+  @apply text-base sm:text-lg text-[color:var(--muted)];
+}
