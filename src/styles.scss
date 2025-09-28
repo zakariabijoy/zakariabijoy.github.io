@@ -16,6 +16,13 @@
   --brand-700: #047857;
   --brand-800: #065f46;
   --brand-900: #064e3b;
+  
+  /* Enhanced color palette for depth */
+  --surface: rgba(255, 255, 255, 0.02);
+  --surface-hover: rgba(255, 255, 255, 0.05);
+  --border: rgba(255, 255, 255, 0.08);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --glow: rgba(52, 211, 153, 0.2);
 }
 
 .dark {
@@ -24,50 +31,277 @@
   --muted: #8ca59a;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html, body {
   height: 100%;
+  overflow-x: hidden;
 }
 
 body {
   @apply bg-[color:var(--bg)] text-[color:var(--fg)] antialiased selection:bg-[color:var(--brand-400)] selection:text-black;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
 }
 
-/***** Modern animated background (subtle, performant) *****/
+/* Enhanced animated background with particle system */
 .bg-animated {
   position: fixed;
   inset: 0;
   z-index: -1;
-  background: radial-gradient(60rem 40rem at 10% 10%, color-mix(in oklab, var(--brand-700) 12%, transparent), transparent 60%),
-              radial-gradient(50rem 30rem at 90% 20%, color-mix(in oklab, var(--brand-500) 10%, transparent), transparent 60%),
-              radial-gradient(40rem 30rem at 50% 100%, color-mix(in oklab, var(--brand-600) 12%, transparent), transparent 60%),
-              linear-gradient(180deg, color-mix(in oklab, #0b0f0e 92%, black), #0b0f0e 40%, #08110e 100%);
-  filter: saturate(1.05) contrast(1.02);
+  background: 
+    radial-gradient(ellipse 800px 600px at 10% 20%, color-mix(in oklab, var(--brand-700) 15%, transparent), transparent 70%),
+    radial-gradient(ellipse 600px 400px at 90% 10%, color-mix(in oklab, var(--brand-500) 12%, transparent), transparent 65%),
+    radial-gradient(ellipse 500px 350px at 20% 80%, color-mix(in oklab, var(--brand-600) 18%, transparent), transparent 60%),
+    radial-gradient(ellipse 700px 500px at 80% 90%, color-mix(in oklab, var(--brand-800) 10%, transparent), transparent 75%),
+    linear-gradient(135deg, 
+      color-mix(in oklab, #0b0f0e 95%, var(--brand-900)), 
+      color-mix(in oklab, #0b0f0e 90%, var(--brand-800)) 40%, 
+      color-mix(in oklab, #08110e 95%, var(--brand-700)) 100%
+    );
+  filter: saturate(1.1) contrast(1.05);
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .bg-animated::before {
     content: '';
     position: absolute;
+    inset: -30vmax;
+    background: 
+      conic-gradient(from 0deg at 30% 30%, 
+        transparent, 
+        color-mix(in oklab, var(--brand-500) 6%, transparent) 20%, 
+        transparent 35%, 
+        color-mix(in oklab, var(--brand-400) 4%, transparent) 55%, 
+        transparent 70%
+      );
+    animation: drift 60s linear infinite;
+    opacity: 0.3;
+    mix-blend-mode: soft-light;
+  }
+  
+  .bg-animated::after {
+    content: '';
+    position: absolute;
     inset: -20vmax;
-    background: conic-gradient(from 0deg, transparent, color-mix(in oklab, var(--brand-500) 8%, transparent), transparent 35%, color-mix(in oklab, var(--brand-400) 6%, transparent), transparent 70%);
-    animation: spin 40s linear infinite;
-    opacity: 0.4;
+    background: 
+      conic-gradient(from 180deg at 70% 70%, 
+        transparent, 
+        color-mix(in oklab, var(--brand-600) 8%, transparent) 25%, 
+        transparent 45%, 
+        color-mix(in oklab, var(--brand-300) 5%, transparent) 65%, 
+        transparent 85%
+      );
+    animation: drift-reverse 45s linear infinite;
+    opacity: 0.25;
     mix-blend-mode: overlay;
   }
-  @keyframes spin {
-    to { transform: rotate(1turn); }
+  
+  @keyframes drift {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(90deg) scale(1.05); }
+    50% { transform: rotate(180deg) scale(1); }
+    75% { transform: rotate(270deg) scale(0.95); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+  
+  @keyframes drift-reverse {
+    0% { transform: rotate(0deg) scale(1); }
+    33% { transform: rotate(-120deg) scale(1.02); }
+    66% { transform: rotate(-240deg) scale(0.98); }
+    100% { transform: rotate(-360deg) scale(1); }
   }
 }
 
-/***** Utility presets *****/
+/* Utility classes */
 .container {
   @apply mx-auto px-4 sm:px-6 lg:px-8;
+  max-width: 1200px;
 }
 
 .section-title {
-  @apply text-3xl sm:text-4xl font-semibold tracking-tight text-[color:var(--fg)];
+  @apply text-3xl sm:text-4xl font-bold tracking-tight text-[color:var(--fg)];
+  background: linear-gradient(135deg, var(--fg), color-mix(in oklab, var(--fg) 70%, var(--brand-400)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 4px var(--shadow);
 }
 
 .section-subtitle {
   @apply text-base sm:text-lg text-[color:var(--muted)];
+  line-height: 1.6;
+}
+
+/* Enhanced card styles */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--surface-hover);
+  transform: translateY(-8px);
+  box-shadow: 
+    0 20px 40px var(--shadow),
+    0 0 20px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Button enhancements */
+.btn-primary {
+  @apply relative overflow-hidden px-8 py-3 rounded-lg font-semibold;
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-400));
+  color: #000;
+  border: 1px solid var(--brand-400);
+  box-shadow: 
+    0 4px 15px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--brand-400), var(--brand-300));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(16, 185, 129, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-primary:hover::before {
+  opacity: 1;
+}
+
+.btn-primary span {
+  position: relative;
+  z-index: 1;
+}
+
+/* Social link enhancements */
+.social-link {
+  @apply relative flex items-center justify-center w-12 h-12 rounded-full;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--brand-400);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.social-link::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--brand-400);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.social-link:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 20px var(--glow);
+  color: #000;
+}
+
+.social-link:hover::before {
+  opacity: 1;
+}
+
+.social-link i {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.social-link:hover i {
+  transform: scale(1.1);
+}
+
+/* Text effects */
+.text-gradient {
+  background: linear-gradient(135deg, var(--brand-400), var(--brand-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow {
+  text-shadow: 0 0 20px var(--glow);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .bg-animated::before,
+  .bg-animated::after {
+    animation: none !important;
+  }
 }

@@ -1,49 +1,220 @@
-.host { display: block; }
+:host { 
+  display: block; 
+}
 
-:host { display: block; }
-
+/* Enhanced Navigation */
 .resume-nav .nav-btn {
-	background: rgba(255,255,255,0.02);
-	color: rgba(255,255,255,0.8);
-	padding: 0.75rem 1rem;
-	border-radius: 6px;
-	border: 1px solid rgba(255,255,255,0.03);
-	text-align: center;
-	font-weight: 600;
-	transition: all .18s ease;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: left;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
+
+.resume-nav .nav-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(52, 211, 153, 0.1), transparent);
+  transition: left 0.5s;
+}
+
+.resume-nav .nav-btn:hover::before {
+  left: 100%;
+}
+
+.resume-nav .nav-btn:hover {
+  background: var(--surface-hover);
+  border-color: rgba(52, 211, 153, 0.3);
+  transform: translateX(8px);
+  color: rgba(255, 255, 255, 0.9);
+}
+
 .resume-nav .nav-btn.active {
-	background: linear-gradient(90deg, rgba(16,185,129,1), rgba(52,211,153,0.95));
-	color: #0b1120;
-	box-shadow: 0 6px 18px rgba(16,185,129,0.12);
-	transform: translateY(-1px);
-}
-.resume-nav .nav-btn:hover { transform: translateY(-1px); }
-
-.text-muted { color: rgba(255,255,255,0.45); }
-.text-accent { color: #22c55e; }
-
-.bg-panel { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.03); }
-.card { transition: transform .18s ease, box-shadow .18s ease; }
-.card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(2,6,23,0.5); }
-
-.skill-card { height: 84px; display:flex; align-items:center; justify-content:center; }
-
-.resume-grid { margin-top: 6px; }
-
-/* Custom scrollbar like screenshot */
-.resume-grid ::-webkit-scrollbar { width: 10px; height: 10px; }
-.resume-grid ::-webkit-scrollbar-track { background: transparent; }
-.resume-grid ::-webkit-scrollbar-thumb { background: rgba(34,197,94,0.95); border-radius: 999px; border: 2px solid rgba(255,255,255,0.02); }
-
-/* info row */
-.info-row { display:flex; align-items:center; justify-content:space-between; }
-
-/* small responsive tweaks */
-@media (min-width: 768px) {
-	.resume-nav .nav-btn { text-align: left; padding-left: 1.25rem; }
+  background: linear-gradient(135deg, 
+    rgba(16, 185, 129, 0.2), 
+    rgba(52, 211, 153, 0.1)
+  );
+  border-color: var(--brand-400);
+  color: white;
+  transform: translateX(8px);
+  box-shadow: 
+    0 8px 25px rgba(16, 185, 129, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
+.resume-nav .nav-btn.active::before {
+  display: none;
+}
+
+/* Content Animation */
+.resume-content {
+  min-height: 400px;
+}
+
+/* Enhanced Cards */
+.glass-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 
+    0 8px 32px var(--shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brand-400), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glass-card:hover {
+  background: var(--surface-hover);
+  transform: translateY(-4px);
+  box-shadow: 
+    0 20px 40px var(--shadow),
+    0 0 20px var(--glow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-card:hover::before {
+  opacity: 1;
+}
+
+/* Skill Cards */
+.skill-card {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.skill-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--brand-400), transparent, var(--brand-600));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: exclude;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.skill-card:hover::after {
+  opacity: 0.5;
+}
+
+/* Enhanced Typography */
+.section-title {
+  background: linear-gradient(135deg, #ffffff, var(--brand-300));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Responsive Design */
+@media (max-width: 1023px) {
+  .resume-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .resume-nav .nav-btn {
+    padding: 0.75rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 639px) {
+  .resume-nav {
+    grid-template-columns: 1fr;
+  }
+  
+  .skill-card {
+    height: 60px;
+    font-size: 0.875rem;
+  }
+}
+
+/* Loading States */
+.resume-content > div {
+  opacity: 0;
+  animation: slideInUp 0.5s ease forwards;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom Scrollbar */
+.resume-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.resume-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.resume-content::-webkit-scrollbar-thumb {
+  background: var(--brand-400);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+.resume-content::-webkit-scrollbar-thumb:hover {
+  opacity: 0.8;
+}
+
+/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
-	.card, .resume-nav .nav-btn { transition: none !important; }
+  .resume-nav .nav-btn,
+  .glass-card,
+  .skill-card {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .resume-nav .nav-btn::before,
+  .glass-card::before,
+  .skill-card::after {
+    display: none !important;
+  }
+}
+
+/* Focus States */
+.resume-nav .nav-btn:focus {
+  outline: 2px solid var(--brand-400);
+  outline-offset: 2px;
 }

@@ -62,4 +62,43 @@ export class WorkComponent implements OnInit, OnDestroy {
   }
 
   get project() { return this.projects[this.index()]; }
+
+  getTotalTechnologies(): number {
+    const allTech = this.projects.flatMap(p => p.tech || []);
+    return new Set(allTech).size;
+  }
+
+  getProjectUrl(project: Project): string | null {
+    if (project.title === 'Reactivities') {
+      return null; // No live demo available
+    }
+    if (project.title === 'BulkyBook') {
+      return 'https://bulkybookzb.azurewebsites.net/';
+    }
+    return null; // CFEMS is internal/private
+  }
+
+  getGithubUrl(project: Project): string | null {
+    if (project.title === 'Reactivities') {
+      return 'https://github.com/zakariabijoy/Reactivities';
+    }
+    if (project.title === 'BulkyBook') {
+      return 'https://github.com/zakariabijoy/BulkyBook';
+    }
+    return null; // CFEMS is proprietary
+  }
+
+  openProject(project: Project): void {
+    const url = this.getProjectUrl(project);
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
+
+  openGithub(project: Project): void {
+    const url = this.getGithubUrl(project);
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
+  }
 }

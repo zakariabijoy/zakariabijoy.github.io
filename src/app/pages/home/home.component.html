@@ -1,23 +1,32 @@
-<section id="home" class="relative">
-  <div class="container grid md:grid-cols-2 gap-16 items-center py-20 min-h-[calc(100vh-80px)]">
-    <div>
-      <p class="text-sm uppercase tracking-wider text-brand-400 font-medium mb-3">Full Stack Software Engineer</p>
+<section id="home" class="relative min-h-screen flex items-center">
+  <div class="container grid md:grid-cols-2 gap-16 items-center py-20">
+    <!-- Left Content -->
+    <div class="animate-fade-in-left">
+      <div class="inline-flex items-center px-4 py-2 mb-6 glass-card">
+        <div class="w-2 h-2 bg-brand-400 rounded-full mr-3 animate-pulse"></div>
+        <p class="text-sm uppercase tracking-wider text-brand-400 font-medium">Full Stack Software Engineer</p>
+      </div>
+      
       <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold leading-[0.9] mb-6">
-        Hello I'm<br/>
-        <span class="text-brand-400">Zakaria Masud</span>
+        <span class="inline-block animate-fade-in-up" style="animation-delay: 0.2s;">Hello I'm</span><br/>
+        <span class="text-gradient inline-block animate-fade-in-up" style="animation-delay: 0.4s;">Zakaria Masud</span>
       </h1>
-      <p class="text-lg text-gray-300 max-w-md leading-relaxed mb-8">
+      
+      <p class="text-lg text-gray-300 max-w-md leading-relaxed mb-8 animate-fade-in-up" style="animation-delay: 0.6s;">
         I am committed and enthusiastic in what I do. I want to see myself as a good and efficient Full Stack Software Engineer working in challenging environments.
       </p>
 
-      <div class="flex items-center gap-4 mb-12">
-        <a href="/assets/Md_Zakaria_Masud_Resume.pdf" download="Md_Zakaria_Masud_Resume.pdf" class="download-cv-btn group relative overflow-hidden px-6 py-3 bg-transparent border border-brand-400 rounded-md text-brand-400 font-medium hover:text-black transition-all duration-300 inline-flex items-center gap-2">
-          <i class="pi pi-download"></i>
-          <span class="relative z-10">DOWNLOAD CV</span>
-          <div class="absolute inset-0 bg-brand-400 transform -translate-x-full group-hover:translate-x-0 transition-transform duration-300"></div>
+      <!-- CTA Section -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-12 animate-fade-in-up" style="animation-delay: 0.8s;">
+        <a href="/assets/Md_Zakaria_Masud_Resume.pdf" download="Md_Zakaria_Masud_Resume.pdf" class="btn-primary group">
+          <span class="flex items-center gap-2">
+            <i class="pi pi-download transition-transform group-hover:scale-110"></i>
+            <span>DOWNLOAD CV</span>
+          </span>
         </a>
 
-        <div class="flex items-center gap-3 ml-4">
+        <!-- Social Links -->
+        <div class="flex items-center gap-3">
           <a href="https://github.com/zakariabijoy" class="social-link" target="_blank" rel="noopener">
             <i class="pi pi-github text-xl"></i>
           </a>
@@ -29,17 +38,67 @@
           </a>
         </div>
       </div>
+
+      <!-- Quick Stats -->
+      <div class="grid grid-cols-3 gap-6 pt-8 border-t border-white/10 animate-fade-in-up" style="animation-delay: 1s;">
+        <div class="text-center">
+          <div class="text-2xl font-bold text-brand-400 counter" data-count="4">0</div>
+          <div class="text-sm text-gray-400 mt-1">Years Experience</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-brand-400 counter" data-count="15">0</div>
+          <div class="text-sm text-gray-400 mt-1">Projects Done</div>
+        </div>
+        <div class="text-center">
+          <div class="text-2xl font-bold text-brand-400 counter" data-count="3">0</div>
+          <div class="text-sm text-gray-400 mt-1">Companies</div>
+        </div>
+      </div>
     </div>
 
-    <div class="relative flex justify-center">
-      <div class="relative profile-photo-container w-80 h-80 rounded-full border-4 border-brand-400/20 overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 shadow-2xl">
-        <img src="/assets/profile.jpg" alt="Profile photo" class="w-full h-full object-cover"/>
+    <!-- Right Content - Enhanced Profile -->
+    <div class="relative flex justify-center animate-fade-in-right" style="animation-delay: 0.3s;">
+      <div class="relative profile-container">
+        <!-- Main Profile Image -->
+        <div class="profile-photo-container relative w-80 h-80 rounded-full overflow-hidden">
+          <img src="/assets/profile.jpg" alt="Zakaria Masud - Full Stack Software Engineer" 
+               class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"/>
+          
+          <!-- Overlay for better contrast -->
+          <div class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
+        </div>
 
-        <!-- Decorative animated rings -->
-        <div class="ring ring-1" aria-hidden="true"></div>
-        <div class="ring ring-2" aria-hidden="true"></div>
-        <div class="ring ring-3" aria-hidden="true"></div>
+        <!-- Floating Tech Icons -->
+        <div class="floating-icons">
+          <div class="tech-icon" style="--delay: 0s; --position: -20px, -40px;">
+            <i class="pi pi-code text-brand-400"></i>
+          </div>
+          <div class="tech-icon" style="--delay: 1s; --position: 80px, -20px;">
+            <span class="text-brand-400 text-sm font-mono">.NET</span>
+          </div>
+          <div class="tech-icon" style="--delay: 2s; --position: -40px, 80px;">
+            <span class="text-brand-400 text-sm font-mono">JS</span>
+          </div>
+          <div class="tech-icon" style="--delay: 3s; --position: 70px, 90px;">
+            <i class="pi pi-database text-brand-400"></i>
+          </div>
+        </div>
+
+        <!-- Decorative Elements -->
+        <div class="absolute -inset-4 bg-gradient-to-r from-brand-400/20 to-brand-600/20 rounded-full blur-xl opacity-30 animate-pulse"></div>
+        
+        <!-- Animated Rings -->
+        <div class="ring ring-1"></div>
+        <div class="ring ring-2"></div>
+        <div class="ring ring-3"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
+    <div class="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center">
+      <div class="w-1 h-3 bg-brand-400 rounded-full mt-2 animate-pulse"></div>
     </div>
   </div>
 </section>
