@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, signal, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-type Project = { title: string; subtitle?: string; description?: string; tech?: string[]; images?: string[] };
+interface Project { title: string; subtitle?: string; description?: string; tech?: string[]; images?: string[] }
 
 @Component({
   selector: 'app-work',
@@ -11,21 +11,28 @@ type Project = { title: string; subtitle?: string; description?: string; tech?: 
   styleUrls: ['./work.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WorkComponent {
+export class WorkComponent implements OnInit, OnDestroy {
   projects: Project[] = [
     {
-      title: 'Frontend Project',
-      subtitle: 'Creative Home Simplify Your Furniture',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Scelerisque consequat, faucibus et, et.',
-      tech: ['Html 5', 'Css 3', 'Javascript'],
-  images: ['/assets/work-1.svg', '/assets/work-1-2.svg'],
+      title: 'CFEMS',
+      subtitle: 'Commuter Facility Equipment Monitoring Services',
+      description: 'A government project of Singapore for monitoring equipment of different contractors. IoT devices monitoring service with real-time data processing and alarm generation.',
+      tech: ['.NET 6 Web API', 'Worker Services', 'SignalR', 'EMQX MQTT', 'Angular 12', 'SQL Server 2019', 'Docker', 'Kubernetes'],
+      images: ['/assets/work-1.svg', '/assets/work-1-2.svg'],
     },
     {
-      title: 'Dashboard App',
-      subtitle: 'Analytics Dashboard',
-      description: 'A responsive analytics dashboard with charts and filters.',
-      tech: ['Angular', 'D3', 'Tailwind'],
-  images: ['/assets/work-2.svg'],
+      title: 'Reactivities',
+      subtitle: 'Social Media Application',
+      description: 'A social media app similar to Facebook where users can post activities, follow other activities, and interact with the community. Built with modern full-stack technologies.',
+      tech: ['ASP.NET Core Web API', 'Clean Architecture', 'CQRS', 'MediatR', 'React', 'TypeScript', 'MobX', 'EF Core', 'SQLite'],
+      images: ['/assets/work-2.svg'],
+    },
+    {
+      title: 'BulkyBook',
+      subtitle: 'Online Book Store',
+      description: 'An online book selling platform built with ASP.NET Core MVC featuring all MVC capabilities with integrated Stripe and Braintree payment systems.',
+      tech: ['ASP.NET Core MVC', 'Identity', 'EF Core', 'Repository Pattern', 'MS SQL Server', 'Stripe API', 'Braintree'],
+      images: ['/assets/work-1.svg'],
     },
   ];
 

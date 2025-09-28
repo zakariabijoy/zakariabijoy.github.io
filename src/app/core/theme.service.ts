@@ -25,14 +25,18 @@ export class ThemeService {
     this.mode.set(mode);
     try {
       localStorage.setItem(this.storageKey, mode);
-    } catch {}
+    } catch {
+      // Storage access failed - mode will still be set in memory
+    }
   }
 
   private detectInitialMode(): 'light' | 'dark' {
     try {
       const stored = localStorage.getItem(this.storageKey) as 'light' | 'dark' | null;
       if (stored === 'light' || stored === 'dark') return stored;
-    } catch {}
+    } catch {
+      // Storage access failed - continue with system preference
+    }
     if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
       return 'dark';
     }

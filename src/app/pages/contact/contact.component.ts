@@ -10,9 +10,8 @@ import { CommonModule } from '@angular/common';
 })
 export class ContactComponent implements OnInit {
   // recipient address used for mailto. Change to your real email if desired.
-  recipient = 'youremail@email.com';
+  recipient = 'zakaria.bijoy@live.com';
 
-  constructor() {}
   ngOnInit(): void {
     // placeholder for future logic (form handling, sending)
   }
