@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "postinstall": "echo Postinstall: no-op",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "github-build": "ng build --configuration production --base-href 'https://zakariabijoy.github.io/'"
   },
   "prettier": {
     "printWidth": 100,
