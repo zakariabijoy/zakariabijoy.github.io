@@ -9,7 +9,7 @@
     "test": "ng test",
     "postinstall": "echo Postinstall: no-op",
     "lint": "ng lint",
-    "github-build": "ng build --configuration production --base-href 'https://zakariabijoy.github.io/'",
+    "github-build": "ng build --configuration production --base-href https://zakariabijoy.github.io/",
     "github-deploy": "npx angular-cli-ghpages --dir=dist/portfolio/browser --no-silent"
   },
   "prettier": {
