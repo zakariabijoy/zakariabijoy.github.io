@@ -384,3 +384,89 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
   }
 }
+
+/* Success Message */
+.success-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--brand-400);
+  border-radius: 12px;
+  color: var(--brand-300);
+  margin-top: 1.5rem;
+  animation: slideInDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.success-message i {
+  font-size: 1.5rem;
+  color: var(--brand-400);
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Enhanced Button States */
+.btn-send {
+  position: relative;
+  min-height: 56px;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-400));
+  color: #000;
+  font-weight: 600;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 4px 15px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 8px 25px rgba(16, 185, 129, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-send:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn-send.loading {
+  pointer-events: none;
+}
+
+/* Enhanced Form Inputs */
+.form-input,
+.form-textarea {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(52, 211, 153, 0.2);
+}
+
+/* Field Error Animation */
+.field-error {
+  animation: shake 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}

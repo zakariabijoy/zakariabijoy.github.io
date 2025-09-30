@@ -38,10 +38,21 @@
               <div class="field-error" *ngIf="errors.message">{{ errors.message }}</div>
             </div>
 
+            <!-- Success Message -->
+            <div class="success-message animate-fade-in-up" *ngIf="showSuccess()">
+              <i class="pi pi-check-circle"></i>
+              <span>Your email client has been opened. Thank you for reaching out!</span>
+            </div>
+
             <div class="form-actions">
-              <button class="btn-send" type="submit" [disabled]="isSubmitting">
-                <span *ngIf="!isSubmitting">Send Message</span>
-                <span *ngIf="isSubmitting" class="loading-text">Sending...</span>
+              <button class="btn-send" type="submit" [disabled]="isSubmitting" [class.loading]="isSubmitting">
+                <span *ngIf="!isSubmitting" class="flex items-center gap-2">
+                  <i class="pi pi-send"></i>
+                  <span>Send Message</span>
+                </span>
+                <span *ngIf="isSubmitting" class="loading-text flex items-center gap-2">
+                  <span>Sending...</span>
+                </span>
               </button>
               <div class="form-note">* Required fields</div>
             </div>

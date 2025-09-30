@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-interface ResumeItem { date?: string; title?: string; company?: string; bullets?: string[] }
+interface ResumeItem { date?: string; title?: string; company?: string; bullets?: string[]; category?: string }
+interface Skill {
+  name: string;
+  category: string;
+}
 
 @Component({
   selector: 'app-resume',
@@ -14,6 +18,7 @@ interface ResumeItem { date?: string; title?: string; company?: string; bullets?
 export class ResumeComponent {
   // tabs: experience | education | skills | about
   activeTab = signal<'experience' | 'education' | 'skills' | 'about'>('experience');
+  expandedBio = signal(false);
 
   experience: ResumeItem[] = [
     { 
@@ -64,59 +69,91 @@ export class ResumeComponent {
   ];
 
   education: ResumeItem[] = [
-    { 
-      date: '2014 - 2019', 
-      title: 'BSc in Computer Science and Engineering', 
-      company: 'East Delta University' 
+    {
+      date: '2014 - 2019',
+      title: 'BSc in Computer Science and Engineering',
+      company: 'East Delta University, Chittagong, Bangladesh',
+      category: 'degrees',
+      bullets: [
+        'Graduated with CGPA: 3.67/4.00',
+        'Specialized in Software Engineering and Database Systems',
+        'Key coursework: Data Structures, Algorithms, Web Development, Database Management',
+        'Final year project: "Smart Campus Management System" using ASP.NET and SQL Server'
+      ]
     },
-    { 
-      date: '2021', 
-      title: 'ASP.NET CORE MVC WITH ANGULAR AND EF CORE', 
-      company: 'PencilBox' 
+    {
+      date: '2021',
+      title: 'ASP.NET CORE MVC WITH ANGULAR AND EF CORE',
+      company: 'PencilBox Training Institute',
+      category: 'certifications',
+      bullets: [
+        'Comprehensive full-stack development course',
+        'Covered modern .NET Core, Angular framework, and Entity Framework',
+        'Hands-on projects and real-world application development',
+        'Certificate of completion with distinction'
+      ]
     },
-    { 
-      date: '2020', 
-      title: 'Complete guide to ASP.NET Core MVC (v3.1)', 
-      company: 'Udemy' 
+    {
+      date: '2020',
+      title: 'Complete guide to ASP.NET Core MVC (v3.1)',
+      company: 'Udemy - Online Learning Platform',
+      category: 'courses',
+      bullets: [
+        'In-depth understanding of ASP.NET Core MVC architecture',
+        'Best practices for building scalable web applications',
+        'Authentication, authorization, and security implementations',
+        'Rating: 4.6/5, 15+ hours of content'
+      ]
     },
-    { 
-      date: '2019', 
-      title: 'Web Application Development-DotNet', 
-      company: 'BASIS Institute of Technology and Management (BITM)' 
+    {
+      date: '2019',
+      title: 'Web Application Development-DotNet',
+      company: 'BASIS Institute of Technology and Management (BITM)',
+      category: 'training',
+      bullets: [
+        'Professional training program by BASIS',
+        'Focus on enterprise-level web application development',
+        'Industry-standard practices and methodologies',
+        'Project-based learning with industry mentors'
+      ]
     },
   ];
 
-  skills: ResumeItem[] = [
-    { title: 'C#' },
-    { title: '.NET Core' },
-    { title: 'ASP.NET' },
-    { title: 'JavaScript' },
-    { title: 'TypeScript' },
-    { title: 'Angular' },
-    { title: 'React' },
-    { title: 'HTML/CSS' },
-    { title: 'Bootstrap' },
-    { title: 'jQuery' },
-    { title: 'SQL Server' },
-    { title: 'PostgreSQL' },
-    { title: 'MySQL' },
-    { title: 'EF Core' },
-    { title: 'Dapper' },
-    { title: 'SignalR' },
-    { title: 'Docker' },
-    { title: 'Kubernetes' },
-    { title: 'AWS EKS' },
-    { title: 'MQTT' },
-    { title: 'Git' },
-    { title: 'Azure DevOps' },
-    { title: 'Python' },
-    { title: 'Java' },
-    { title: 'PHP' },
-    { title: 'Laravel' },
-    { title: 'OutSystems' },
-    { title: 'Clean Architecture' },
-    { title: 'CQRS' },
-    { title: 'MediatR' },
+  skills: Skill[] = [
+    // Programming Languages
+    { name: 'C#', category: 'languages' },
+    { name: 'JavaScript', category: 'languages' },
+    { name: 'TypeScript', category: 'languages' },
+    { name: 'Python', category: 'languages' },
+    { name: 'Java', category: 'languages' },
+    { name: 'PHP', category: 'languages' },
+
+    // Frameworks & Libraries
+    { name: '.NET Core', category: 'frameworks' },
+    { name: 'ASP.NET', category: 'frameworks' },
+    { name: 'Angular', category: 'frameworks' },
+    { name: 'React', category: 'frameworks' },
+    { name: 'Laravel', category: 'frameworks' },
+    { name: 'EF Core', category: 'frameworks' },
+
+    // Databases
+    { name: 'SQL Server', category: 'databases' },
+    { name: 'PostgreSQL', category: 'databases' },
+    { name: 'MySQL', category: 'databases' },
+
+    // Tools & Technologies
+    { name: 'Docker', category: 'tools' },
+    { name: 'Kubernetes', category: 'tools' },
+    { name: 'Git', category: 'tools' },
+    { name: 'Azure DevOps', category: 'tools' },
+    { name: 'AWS EKS', category: 'tools' },
+    { name: 'MQTT', category: 'tools' },
+
+    // Other Skills
+    { name: 'Clean Architecture', category: 'methodologies' },
+    { name: 'CQRS', category: 'methodologies' },
+    { name: 'MediatR', category: 'methodologies' },
+    { name: 'SignalR', category: 'methodologies' },
   ];
 
   about: { label: string; value: string }[] = [
@@ -136,6 +173,10 @@ export class ResumeComponent {
     this.activeTab.set(tab);
   }
 
+  toggleBio() {
+    this.expandedBio.update(val => !val);
+  }
+
   get currentItems() {
     const t = this.activeTab();
     if (t === 'experience') return this.experience;
@@ -143,4 +184,59 @@ export class ResumeComponent {
     if (t === 'skills') return this.skills;
     return this.about;
   }
+
+  // Group skills by category
+  get skillsByCategory() {
+    const categories = {
+      languages: { title: 'Programming Languages', icon: 'pi-code', skills: [] as Skill[] },
+      frameworks: { title: 'Frameworks & Libraries', icon: 'pi-cog', skills: [] as Skill[] },
+      databases: { title: 'Databases', icon: 'pi-database', skills: [] as Skill[] },
+      tools: { title: 'Tools & Technologies', icon: 'pi-wrench', skills: [] as Skill[] },
+      methodologies: { title: 'Architecture & Patterns', icon: 'pi-sitemap', skills: [] as Skill[] }
+    };
+
+    this.skills.forEach(skill => {
+      if (categories[skill.category as keyof typeof categories]) {
+        categories[skill.category as keyof typeof categories].skills.push(skill);
+      }
+    });
+
+    return Object.values(categories).filter(cat => cat.skills.length > 0);
+  }
+
+  // Group education by category
+  get educationByCategory() {
+    const categories = {
+      degrees: { title: 'Academic Degrees', icon: 'pi-graduation-cap', items: [] as ResumeItem[] },
+      certifications: { title: 'Professional Certifications', icon: 'pi-certificate', items: [] as ResumeItem[] },
+      courses: { title: 'Online Courses', icon: 'pi-video', items: [] as ResumeItem[] },
+      training: { title: 'Training Programs', icon: 'pi-users', items: [] as ResumeItem[] }
+    };
+
+    this.education.forEach(item => {
+      if (item.category && categories[item.category as keyof typeof categories]) {
+        categories[item.category as keyof typeof categories].items.push(item);
+      }
+    });
+
+    return Object.values(categories).filter(cat => cat.items.length > 0);
+  }
+
+  // Two segments for education UI: Academic and Professional
+  get educationSegments() {
+    const academic = {
+      title: 'Academic Education',
+      icon: 'pi-graduation-cap',
+      items: this.education.filter(e => e.category === 'degrees')
+    };
+
+    const professional = {
+      title: 'Professional Training & Certifications',
+      icon: 'pi-briefcase',
+      items: this.education.filter(e => e.category && e.category !== 'degrees')
+    };
+
+    return [academic, professional].filter(s => s.items && s.items.length > 0);
+  }
 }
+

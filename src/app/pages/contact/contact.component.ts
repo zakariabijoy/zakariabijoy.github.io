@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -21,6 +21,7 @@ export class ContactComponent implements OnInit {
 
   // Form submission state
   isSubmitting = false;
+  showSuccess = signal(false);
 
   private validatePhone(phone: string) {
     if (!phone) return true;
@@ -72,10 +73,16 @@ export class ContactComponent implements OnInit {
     const mailto = `mailto:${this.recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     window.location.href = mailto;
 
-    // Reset submitting state after a short delay (since mailto opens immediately)
+    // Show success message
     setTimeout(() => {
       this.isSubmitting = false;
+      this.showSuccess.set(true);
+      // Hide success message after 5 seconds
+      setTimeout(() => this.showSuccess.set(false), 5000);
     }, 1000);
   }
 }
 // ...existing component is above. No duplicate declarations.
+
+
+

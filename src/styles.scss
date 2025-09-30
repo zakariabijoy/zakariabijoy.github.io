@@ -305,3 +305,265 @@ body {
     animation: none !important;
   }
 }
+
+/* Enhanced Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+p {
+  line-height: 1.75;
+  font-size: clamp(0.9375rem, 2vw, 1.125rem);
+}
+
+/* Improved Button Spacing */
+.btn-primary,
+.btn-secondary {
+  min-height: 48px;
+  padding: 0.875rem 2rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 2px solid var(--brand-400);
+  color: var(--brand-400);
+  box-shadow: none;
+}
+
+.btn-secondary:hover {
+  background: rgba(52, 211, 153, 0.1);
+  border-color: var(--brand-300);
+  color: var(--brand-300);
+}
+
+/* Better Spacing Utilities */
+.section-padding {
+  padding: clamp(3rem, 8vw, 6rem) 0;
+}
+
+.content-spacing > * + * {
+  margin-top: 1.5rem;
+}
+
+/* Enhanced Focus Visible for Better Accessibility */
+*:focus-visible {
+  outline: 3px solid var(--brand-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Smooth Scroll Padding for Anchor Links */
+html {
+  scroll-padding-top: 100px;
+}
+
+/* Loading State */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--brand-400);
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 0%,
+    var(--surface-hover) 50%,
+    var(--surface) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Improved Card Hover Effects */
+.card-hover {
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card-hover:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+/* Better Text Selection */
+::selection {
+  background-color: var(--brand-400);
+  color: #000;
+  text-shadow: none;
+}
+
+::-moz-selection {
+  background-color: var(--brand-400);
+  color: #000;
+  text-shadow: none;
+}
+
+/* Smooth Image Loading */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+img[loading="lazy"] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+img[loading="lazy"].loaded {
+  opacity: 1;
+}
+
+/* Better Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--surface);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--brand-700);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-600);
+}
+
+/* Responsive Improvements */
+@media (max-width: 640px) {
+  h1 {
+    font-size: 2.25rem;
+    line-height: 1.1;
+  }
+  
+  .section-title {
+    font-size: 1.875rem;
+  }
+  
+  .container {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Better Touch Targets for Mobile */
+@media (hover: none) and (pointer: coarse) {
+  .btn-primary,
+  .btn-secondary,
+  .social-link,
+  .nav-link,
+  .mobile-nav-link {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  button,
+  a[href] {
+    -webkit-tap-highlight-color: rgba(52, 211, 153, 0.2);
+  }
+}
+
+/* Print Styles */
+@media print {
+  header,
+  .social-link,
+  .btn-primary,
+  .btn-secondary,
+  .mobile-nav,
+  .mobile-overlay {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  .glass-card {
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  .glass-card {
+    border-width: 2px;
+  }
+  
+  .btn-primary,
+  .btn-secondary {
+    border-width: 2px;
+  }
+  
+  :focus-visible {
+    outline-width: 4px;
+  }
+}
+
+/* Dark Mode Specific Enhancements */
+@media (prefers-color-scheme: dark) {
+  ::selection {
+    background-color: var(--brand-400);
+    color: #000;
+  }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-height: 500px) and (orientation: landscape) {
+  .min-h-screen {
+    min-height: auto;
+    padding: 2rem 0;
+  }
+}

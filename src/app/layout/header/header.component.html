@@ -1,11 +1,11 @@
-<header class="sticky top-0 z-50 glass-card  ">
+<header class="sticky top-0 z-50 glass-card">
   <div class="container flex items-center justify-between py-4">
     <!-- Logo/Brand -->
     <a routerLink="/" class="text-2xl font-bold tracking-tight hover:scale-105 transition-transform">
       <span class="text-white">Zakaria</span><span class="text-gradient">.</span>
     </a>
 
-    <!-- Navigation -->
+    <!-- Desktop Navigation -->
     <nav class="hidden md:flex items-center gap-8 text-sm font-medium">
       <a routerLink="/" 
          routerLinkActive="nav-active" 
@@ -30,19 +30,70 @@
       </a>
     </nav>
 
-    <!-- Actions -->
-    <div class="flex items-center gap-4">
-      <!-- Mobile Menu Button -->
-      <button pButton pRipple 
-              class="p-button-text text-brand-400 hover:bg-brand-400/10 md:hidden rounded-lg p-2" 
-              (click)="toggleTheme()">
-        <i class="pi pi-bars" aria-hidden="true"></i>
-      </button>
-      
-      <!-- CTA Button -->
+    <!-- Desktop Actions -->
+    <div class="hidden md:flex items-center gap-4">
       <a routerLink="/contact" class="btn-primary">
         <span>Hire me</span>
       </a>
     </div>
+
+    <!-- Mobile Menu Toggle -->
+    <button pButton pRipple 
+            class="p-button-text text-brand-400 hover:bg-brand-400/10 md:hidden rounded-lg p-2" 
+            (click)="toggleMobileMenu()"
+            [attr.aria-expanded]="mobileMenuOpen()"
+            aria-label="Toggle mobile menu">
+      <i [class]="mobileMenuOpen() ? 'pi pi-times' : 'pi pi-bars'" aria-hidden="true"></i>
+    </button>
   </div>
+
+  <!-- Mobile Navigation -->
+  <div class="mobile-nav" 
+       [class.mobile-nav-open]="mobileMenuOpen()"
+       [@mobileMenu]="mobileMenuOpen() ? 'open' : 'closed'">
+    <nav class="mobile-nav-content">
+      <a routerLink="/" 
+         routerLinkActive="nav-active" 
+         [routerLinkActiveOptions]="{ exact: true }" 
+         class="mobile-nav-link"
+         (click)="closeMobileMenu()">
+        <i class="pi pi-home"></i>
+        <span>Home</span>
+      </a>
+      <a routerLink="/resume" 
+         routerLinkActive="nav-active" 
+         class="mobile-nav-link"
+         (click)="closeMobileMenu()">
+        <i class="pi pi-file"></i>
+        <span>Resume</span>
+      </a>
+      <a routerLink="/work" 
+         routerLinkActive="nav-active" 
+         class="mobile-nav-link"
+         (click)="closeMobileMenu()">
+        <i class="pi pi-briefcase"></i>
+        <span>Work</span>
+      </a>
+      <a routerLink="/contact" 
+         routerLinkActive="nav-active" 
+         class="mobile-nav-link"
+         (click)="closeMobileMenu()">
+        <i class="pi pi-envelope"></i>
+        <span>Contact</span>
+      </a>
+
+      <div class="mobile-nav-footer">
+        <a routerLink="/contact" 
+           class="btn-primary w-full justify-center"
+           (click)="closeMobileMenu()">
+          <span>Hire me</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-overlay" 
+       [class.mobile-overlay-active]="mobileMenuOpen()"
+       (click)="closeMobileMenu()"></div>
 </header>

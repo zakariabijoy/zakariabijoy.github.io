@@ -126,21 +126,40 @@
             </div>
           </div>
 
-          <!-- Education Section -->
+          <!-- Education Section (Segmented) -->
           <div *ngIf="activeTab() === 'education'" class="animate-fade-in-up">
-            <div class="grid gap-6">
-              <div *ngFor="let item of education; let i = index" 
-                   class="glass-card p-6 hover:scale-[1.02] transition-all duration-300"
-                   [style.animation-delay]="(i * 0.1) + 's'">
-                <div class="flex flex-col lg:flex-row gap-4">
-                  <div class="flex-shrink-0">
-                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-brand-400/10 border border-brand-400/20">
-                      <span class="text-brand-400 text-sm font-medium">{{ item.date }}</span>
+            <div class="grid grid-cols-1 gap-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div *ngFor="let segment of educationSegments; let i = index"
+                     class="education-segment"
+                     [style.animation-delay]="(i * 0.08) + 's'">
+                  <div class="segment-header flex items-center gap-3 p-4 rounded-lg">
+                    <div class="segment-icon w-10 h-10 rounded-md flex items-center justify-center text-white"
+                         [ngClass]="{ 'academic': i === 0, 'professional': i === 1 }">
+                      <i [class]="'pi ' + segment.icon"></i>
                     </div>
+                    <h3 class="text-lg font-semibold text-white">{{ segment.title }}</h3>
                   </div>
-                  <div class="flex-1">
-                    <h4 class="text-xl font-semibold text-white mb-1">{{ item.title }}</h4>
-                    <p class="text-brand-400 font-medium">{{ item.company }}</p>
+
+                  <div class="segment-body mt-4">
+                    <div *ngFor="let item of segment.items; let j = index" class="segment-item mb-4">
+                      <div class="glass-card p-4">
+                        <div class="flex items-start gap-4">
+                          <div class="flex-shrink-0">
+                            <div class="inline-flex items-center px-3 py-1 rounded-full bg-brand-400/10 border border-brand-400/20">
+                              <span class="text-brand-400 text-sm font-medium">{{ item.date }}</span>
+                            </div>
+                          </div>
+                          <div class="flex-1">
+                            <h4 class="text-lg font-semibold text-white">{{ item.title }}</h4>
+                            <p class="text-brand-400 font-medium mb-2">{{ item.company }}</p>
+                            <p *ngIf="item.bullets && item.bullets.length > 0" class="text-gray-300 text-sm leading-relaxed">
+                              {{ item.bullets[0] }}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -149,17 +168,59 @@
 
           <!-- Skills Section -->
           <div *ngIf="activeTab() === 'skills'" class="animate-fade-in-up">
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              <div *ngFor="let skill of skills; let i = index" 
-                   class="skill-card glass-card p-4 text-center hover:scale-105 transition-all duration-300 hover:bg-brand-400/5"
-                   [style.animation-delay]="(i * 0.05) + 's'">
-                <div class="text-brand-400 font-semibold text-sm">{{ skill.title }}</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <div *ngFor="let category of skillsByCategory; let i = index"
+                   class="skill-category glass-card p-6 hover:scale-[1.02] transition-all duration-300"
+                   [style.animation-delay]="(i * 0.1) + 's'">
+                <div class="skill-category-header">
+                  <div class="flex items-center gap-3 mb-6">
+                    <i [class]="'pi ' + category.icon + ' text-2xl text-brand-400'"></i>
+                    <h3 class="text-xl font-semibold text-white">{{ category.title }}</h3>
+                  </div>
+                </div>
+                <div class="skill-grid">
+                  <div *ngFor="let skill of category.skills; let j = index"
+                       class="skill-chip"
+                       [style.animation-delay]="(i * 0.1 + j * 0.05) + 's'">
+                    <span class="skill-name">{{ skill.name }}</span>
+                    <div class="skill-glow"></div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- About Section -->
-          <div *ngIf="activeTab() === 'about'" class="animate-fade-in-up">
+          <div *ngIf="activeTab() === 'about'" class="animate-fade-in-up space-y-6">
+            <!-- Bio Section -->
+            <div class="glass-card p-6 hover:scale-[1.02] transition-all duration-300">
+              <div class="flex flex-col lg:flex-row gap-6 items-start">
+                <div class="flex-shrink-0">
+                  <img 
+                    src="assets/profile.jpg" 
+                    alt="Md. Zakaria Masud" 
+                    class="w-24 h-24 rounded-full border-4 border-brand-400 shadow-lg object-cover">
+                </div>
+                <div class="flex-1">
+                  <h4 class="text-2xl font-semibold text-white mb-2">Md. Zakaria Masud</h4>
+                  <p class="text-brand-400 font-medium mb-4">Full-Stack Software Engineer</p>
+                  <p class="text-gray-300 leading-relaxed mb-4">
+                    Passionate software engineer with 4+ years of experience in full-stack development, specializing in .NET Core, Angular, and cloud technologies.
+                  </p>
+                  <p *ngIf="expandedBio()" class="text-gray-400 leading-relaxed">
+                    I focus on building scalable and maintainable applications using Clean Architecture and modern development practices. My journey in tech has been driven by curiosity and problem-solving, working on diverse projects from IoT systems to web applications.
+                  </p>
+                  <button 
+                    (click)="toggleBio()" 
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-brand-400/10 border border-brand-400/20 text-brand-400 hover:bg-brand-400/20 transition-colors duration-300">
+                    <span>{{ expandedBio() ? 'Show Less' : 'Read More' }}</span>
+                    <i class="pi pi-chevron-{{ expandedBio() ? 'up' : 'down' }}"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Personal Info Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div *ngFor="let item of about; let i = index" 
                    class="glass-card p-4 flex items-center justify-between hover:scale-[1.02] transition-all duration-300"
