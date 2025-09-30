@@ -10,7 +10,8 @@
     "postinstall": "echo Postinstall: no-op",
     "lint": "ng lint",
     "github-build": "ng build --configuration production --base-href https://zakariabijoy.github.io/",
-    "github-deploy": "npx angular-cli-ghpages --dir=dist/portfolio/browser --no-silent"
+    "github-publish": "npx angular-cli-ghpages --dir=dist/portfolio/browser --no-silent",
+    "github-deploy": "npm run github-build && npm run github-publish"
   },
   "prettier": {
     "printWidth": 100,
