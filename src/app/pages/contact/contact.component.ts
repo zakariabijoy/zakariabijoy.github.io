@@ -1,88 +1,70 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ContactService } from '../../core/contact.service';
+import { PortfolioDataService } from '../../core/portfolio-data.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   selector: 'app-contact-page',
   templateUrl: './contact.component.html',
-  styleUrls: ['./contact.component.scss']
+  styleUrls: ['./contact.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ContactComponent implements OnInit {
-  // recipient address used for mailto. Change to your real email if desired.
-  recipient = 'zakaria.bijoy@live.com';
+export class ContactComponent {
+  private readonly contact = inject(ContactService);
+  private readonly data = inject(PortfolioDataService);
+  private readonly fb = inject(FormBuilder);
 
-  ngOnInit(): void {
-    // placeholder for future logic (form handling, sending)
-  }
+  readonly profile = this.data.profile;
+  readonly socialLinks = this.data.socialLinks;
 
-  // Simple errors holder to show inline validation messages in the template.
-  errors: { first?: string; last?: string; phone?: string; email?: string; message?: string } = {};
+  readonly status = signal<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
-  // Form submission state
-  isSubmitting = false;
-  showSuccess = signal(false);
+  readonly form = this.fb.nonNullable.group({
+    firstName: ['', [Validators.required, Validators.maxLength(100)]],
+    lastName: ['', Validators.maxLength(100)],
+    email: ['', [Validators.required, Validators.email]],
+    phone: ['', Validators.pattern(/^[0-9+()\s-]{6,}$/)],
+    message: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(5000)]],
+  });
 
-  private validatePhone(phone: string) {
-    if (!phone) return true;
-    // allow digits, spaces, parentheses, plus and hyphens; require at least 6 chars
-    return /^[0-9+()\s-]{6,}$/.test(phone.trim());
-  }
-
-  private validateEmail(email: string): boolean {
-    if (!email) return false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email.trim());
-  }
-
-  sendEmail(first: string, last: string, phone: string, email: string, message: string) {
-    // Set submitting state
-    this.isSubmitting = true;
-
-    // Clear previous errors
-    this.errors = {};
-
-    const f = (first || '').trim();
-    const l = (last || '').trim();
-    const msg = (message || '').trim();
-    const ph = (phone || '').trim();
-    const em = (email || '').trim();
-
-    // Validate required fields: first name, email, and message
-    if (!f) this.errors.first = 'First name is required.';
-    if (!em) this.errors.email = 'Email address is required.';
-    else if (!this.validateEmail(em)) this.errors.email = 'Please enter a valid email address.';
-    if (!msg) this.errors.message = 'Please enter a message.';
-    if (ph && !this.validatePhone(ph)) this.errors.phone = 'Please enter a valid phone number.';
-
-    // If any errors, stop and let template render messages
-    if (Object.keys(this.errors).length) {
-      this.isSubmitting = false;
-      return;
+  fieldError(name: 'firstName' | 'lastName' | 'email' | 'phone' | 'message'): string | null {
+    const control = this.form.controls[name];
+    if (!control.invalid || (!control.touched && this.status() === 'idle')) return null;
+    if (control.hasError('required')) {
+      return name === 'message' ? 'Please enter a message.' : 'This field is required.';
     }
+    if (control.hasError('email')) return 'Please enter a valid email address.';
+    if (control.hasError('pattern')) return 'Please enter a valid phone number.';
+    if (control.hasError('minlength')) return 'Message must be at least 10 characters.';
+    if (control.hasError('maxlength')) return 'Too long.';
+    return 'Invalid value.';
+  }
 
-    const name = [f, l].filter(Boolean).join(' ').trim();
-    const subject = name ? `Contact from ${name}` : 'Contact from website';
+  async submit() {
+    if (this.status() === 'sending') return;
 
-    let body = '';
-    if (msg) body += `${msg}\n\n`;
-    if (ph) body += `Phone: ${ph}\n`;
-    if (em) body += `Email: ${em}\n`;
-    body += `\n--\nSent from the portfolio site.`;
+    this.form.markAllAsTouched();
+    if (this.form.invalid) return;
 
-    const mailto = `mailto:${this.recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
+    this.status.set('sending');
+    const value = this.form.getRawValue();
+    const { ok } = await this.contact.send({
+      first_name: value.firstName.trim(),
+      last_name: value.lastName.trim() || null,
+      email: value.email.trim(),
+      phone: value.phone.trim() || null,
+      message: value.message.trim(),
+    });
 
-    // Show success message
-    setTimeout(() => {
-      this.isSubmitting = false;
-      this.showSuccess.set(true);
-      // Hide success message after 5 seconds
-      setTimeout(() => this.showSuccess.set(false), 5000);
-    }, 1000);
+    if (ok) {
+      this.status.set('sent');
+      this.form.reset();
+      setTimeout(() => this.status.set('idle'), 6000);
+    } else {
+      this.status.set('error');
+    }
   }
 }
-// ...existing component is above. No duplicate declarations.
-
-
-

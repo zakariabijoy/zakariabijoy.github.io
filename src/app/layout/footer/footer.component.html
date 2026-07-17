@@ -1,10 +1,16 @@
 <footer class="py-8 border-t border-white/10 mt-16">
-  <div class="container flex items-center justify-between text-sm text-[color:var(--muted)]">
-    <span>© {{ currentYear }} Zakaria. All rights reserved.</span>
-    <div class="flex items-center gap-3">
-      <a href="#" class="hover:text-brand-400">GitHub</a>
-      <a href="#" class="hover:text-brand-400">LinkedIn</a>
-      <a href="#" class="hover:text-brand-400">X</a>
+  <div class="container flex flex-col sm:flex-row items-center justify-between gap-3 text-sm text-[color:var(--muted)]">
+    <span>© {{ currentYear }} {{ profile().full_name }}. All rights reserved.</span>
+    <div class="flex items-center gap-4">
+      @for (link of socialLinks(); track link.label) {
+        <a [href]="link.url"
+           class="hover:text-brand-400 transition-colors inline-flex items-center gap-1.5"
+           [target]="link.url.startsWith('mailto:') ? '_self' : '_blank'"
+           rel="noopener noreferrer">
+          <i [class]="link.icon" aria-hidden="true"></i>
+          <span>{{ link.label }}</span>
+        </a>
+      }
     </div>
   </div>
 </footer>

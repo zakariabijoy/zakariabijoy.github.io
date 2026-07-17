@@ -1,16 +1,34 @@
-import { ChangeDetectionStrategy, Component, AfterViewInit, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, AfterViewInit, ElementRef, computed, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { PortfolioDataService } from '../../core/portfolio-data.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, RouterLink],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements AfterViewInit {
+  private readonly data = inject(PortfolioDataService);
+  private readonly elementRef = inject(ElementRef);
 
-  constructor(private elementRef: ElementRef) {}
+  readonly profile = this.data.profile;
+  readonly socialLinks = this.data.socialLinks;
+
+  readonly featuredProject = computed(() => this.data.projects()[0]);
+
+  readonly coreSkills = computed(() =>
+    this.data.skills()
+      .filter(s => s.category === 'languages' || s.category === 'frameworks')
+      .slice(0, 8),
+  );
+
+  readonly aiSkills = computed(() =>
+    this.data.skills().filter(s => s.category === 'ai_llm').slice(0, 6),
+  );
 
   ngAfterViewInit(): void {
     this.initCounterAnimations();
@@ -18,7 +36,7 @@ export class HomeComponent implements AfterViewInit {
 
   private initCounterAnimations(): void {
     const counters = this.elementRef.nativeElement.querySelectorAll('.counter');
-    
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {

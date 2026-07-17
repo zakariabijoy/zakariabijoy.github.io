@@ -23,6 +23,16 @@
   --border: rgba(255, 255, 255, 0.08);
   --shadow: rgba(0, 0, 0, 0.3);
   --glow: rgba(52, 211, 153, 0.2);
+
+  /* Fluid typography scale */
+  --text-sm: clamp(0.833rem, 0.8rem + 0.15vw, 0.9rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-lg: clamp(1.2rem, 1.1rem + 0.4vw, 1.4rem);
+  --text-xl: clamp(1.44rem, 1.3rem + 0.7vw, 1.8rem);
+  --text-2xl: clamp(1.73rem, 1.5rem + 1.1vw, 2.3rem);
+  --text-3xl: clamp(2.07rem, 1.7rem + 1.8vw, 3rem);
+  --text-4xl: clamp(2.49rem, 1.9rem + 2.9vw, 4rem);
+  --text-hero: clamp(3rem, 2.2rem + 4.5vw, 5.5rem);
 }
 
 .dark {
@@ -135,6 +145,38 @@ body {
   line-height: 1.6;
 }
 
+/* Bento grid layout utilities */
+.bento-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.bento-card {
+  background: var(--surface);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: var(--surface-hover);
+    border-color: color-mix(in srgb, var(--brand-400) 35%, var(--border));
+    transform: translateY(-4px);
+  }
+}
+
+.bento-span-2 { @media (min-width: 768px) { grid-column: span 2; } }
+.bento-span-3 { @media (min-width: 768px) { grid-column: span 3; } }
+.bento-span-4 { @media (min-width: 768px) { grid-column: span 4; } }
+.bento-span-6 { @media (min-width: 768px) { grid-column: span 6; } }
+
 /* Enhanced card styles */
 .glass-card {
   background: var(--surface);
@@ -188,6 +230,11 @@ body {
   opacity: 1;
 }
 
+.btn-primary:active {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
 .btn-primary span {
   position: relative;
   z-index: 1;
@@ -230,6 +277,11 @@ body {
 
 .social-link:hover i {
   transform: scale(1.1);
+}
+
+.social-link:active {
+  transform: translateY(-1px) scale(0.97);
+  transition-duration: 0.1s;
 }
 
 /* Text effects */

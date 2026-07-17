@@ -404,6 +404,24 @@
   color: var(--brand-400);
 }
 
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #f87171;
+  border-radius: 12px;
+  color: #fca5a5;
+  margin-top: 1.5rem;
+  animation: slideInDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.error-message i {
+  font-size: 1.5rem;
+  color: #f87171;
+}
+
 @keyframes slideInDown {
   from {
     opacity: 0;

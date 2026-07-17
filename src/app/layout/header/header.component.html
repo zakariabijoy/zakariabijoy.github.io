@@ -48,9 +48,8 @@
   </div>
 
   <!-- Mobile Navigation -->
-  <div class="mobile-nav" 
-       [class.mobile-nav-open]="mobileMenuOpen()"
-       [@mobileMenu]="mobileMenuOpen() ? 'open' : 'closed'">
+  <div class="mobile-nav"
+       [class.mobile-nav-open]="mobileMenuOpen()">
     <nav class="mobile-nav-content">
       <a routerLink="/" 
          routerLinkActive="nav-active" 
@@ -93,7 +92,8 @@
   </div>
 
   <!-- Mobile Overlay -->
-  <div class="mobile-overlay" 
+  <div class="mobile-overlay"
        [class.mobile-overlay-active]="mobileMenuOpen()"
+       aria-hidden="true"
        (click)="closeMobileMenu()"></div>
 </header>

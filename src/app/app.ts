@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { HeaderComponent } from './layout/header/header.component';
+import { FooterComponent } from './layout/footer/footer.component';
 import { BgLayerComponent } from './shared/bg-layer/bg-layer.component';
 import { RouterOutlet } from '@angular/router';
 import { ThemeService } from './core/theme.service';
@@ -9,6 +10,7 @@ import { ThemeService } from './core/theme.service';
   standalone: true,
   imports: [
     HeaderComponent,
+    FooterComponent,
     BgLayerComponent,
     RouterOutlet,
   ],

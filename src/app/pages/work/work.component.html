@@ -4,7 +4,7 @@
     <div class="text-center mb-16 animate-fade-in-up">
       <h2 class="section-title mb-4">My Projects</h2>
       <p class="section-subtitle max-w-2xl mx-auto">
-        A showcase of my professional work including enterprise IoT solutions, social media platforms, 
+        A showcase of my professional work including enterprise IoT solutions, social media platforms,
         and e-commerce applications built with modern technologies.
       </p>
     </div>
@@ -17,46 +17,50 @@
           <div class="project-number">
             <span class="number-large">{{ (index() + 1).toString().padStart(2, '0') }}</span>
             <div class="number-progress">
-              <div class="progress-bar" [style.width.%]="((index() + 1) / projects.length) * 100"></div>
+              <div class="progress-bar" [style.width.%]="((index() + 1) / projects().length) * 100"></div>
             </div>
           </div>
 
           <!-- Project Details -->
-          <h3 class="project-title">{{ project.title }}</h3>
-          <p class="project-subtitle">{{ project.subtitle }}</p>
-          <p class="project-description">{{ project.description }}</p>
+          <h3 class="project-title">{{ project().title }}</h3>
+          <p class="project-subtitle">{{ project().subtitle }}</p>
+          <p class="project-description">{{ project().description }}</p>
 
           <!-- Tech Stack -->
           <div class="tech-stack">
             <h4 class="tech-label">Technologies Used:</h4>
             <div class="tech-grid">
-              <span *ngFor="let tech of project.tech" class="tech-tag">{{ tech }}</span>
+              @for (tech of project().tech; track tech) {
+                <span class="tech-tag">{{ tech }}</span>
+              }
             </div>
           </div>
 
           <!-- Action Buttons -->
           <div class="project-actions">
-            <a *ngIf="getProjectUrl(project)" 
-               [href]="getProjectUrl(project)" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="btn-primary">
-              <span class="flex items-center gap-2">
-                <i class="pi pi-external-link"></i>
-                <span>View Live</span>
-              </span>
-            </a>
-            
-            <a *ngIf="getGithubUrl(project)" 
-               [href]="getGithubUrl(project)" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="btn-secondary">
-              <span class="flex items-center gap-2">
-                <i class="pi pi-github"></i>
-                <span>Source Code</span>
-              </span>
-            </a>
+            @if (project().live_url; as liveUrl) {
+              <a [href]="liveUrl"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn-primary">
+                <span class="flex items-center gap-2">
+                  <i class="pi pi-external-link"></i>
+                  <span>View Live</span>
+                </span>
+              </a>
+            }
+
+            @if (project().github_url; as githubUrl) {
+              <a [href]="githubUrl"
+                 target="_blank"
+                 rel="noopener noreferrer"
+                 class="btn-secondary">
+                <span class="flex items-center gap-2">
+                  <i class="pi pi-github"></i>
+                  <span>Source Code</span>
+                </span>
+              </a>
+            }
           </div>
 
           <!-- Navigation -->
@@ -65,14 +69,15 @@
               <i class="pi pi-chevron-left"></i>
             </button>
             <div class="nav-dots">
-              <button *ngFor="let p of projects; let i = index" 
-                      class="nav-dot" 
-                      [class.active]="i === index()"
-                      (click)="goTo(i)"
-                      [attr.aria-label]="'Go to project ' + (i + 1)">
-              </button>
+              @for (p of projects(); track p.title; let i = $index) {
+                <button class="nav-dot"
+                        [class.active]="i === index()"
+                        (click)="goTo(i)"
+                        [attr.aria-label]="'Go to project ' + (i + 1)">
+                </button>
+              }
             </div>
-            <button class="nav-btn" (click)="next()" [disabled]="index() === projects.length - 1" aria-label="Next project">
+            <button class="nav-btn" (click)="next()" [disabled]="index() === projects().length - 1" aria-label="Next project">
               <i class="pi pi-chevron-right"></i>
             </button>
           </div>
@@ -85,25 +90,28 @@
           <div class="preview-container glass-card">
             <!-- Main Image -->
             <div class="main-image">
-              <img [src]="project.images?.[0] || '/assets/work-1.svg'" 
-                   [alt]="project.title + ' preview'"
+              <img [src]="project().images[0] || '/assets/work-1.svg'"
+                   [alt]="project().title + ' preview'"
                    class="project-image">
               <div class="image-overlay"></div>
-              
+
               <!-- Project Badge -->
               <div class="project-badge">
-                <span>{{ project.title.split(' ')[0] }}</span>
+                <span>{{ project().title.split(' ')[0] }}</span>
               </div>
             </div>
 
             <!-- Additional Images -->
-            <div class="image-gallery" *ngIf="project.images && project.images.length > 1">
-              <div *ngFor="let img of project.images.slice(1); let i = index" 
-                   class="gallery-item"
-                   [style.animation-delay]="(i * 0.1) + 's'">
-                <img [src]="img" [alt]="project.title + ' screenshot ' + (i + 2)">
+            @if (project().images.length > 1) {
+              <div class="image-gallery">
+                @for (img of project().images.slice(1); track img; let i = $index) {
+                  <div class="gallery-item"
+                       [style.animation-delay]="(i * 0.1) + 's'">
+                    <img [src]="img" [alt]="project().title + ' screenshot ' + (i + 2)">
+                  </div>
+                }
               </div>
-            </div>
+            }
           </div>
 
           <!-- Keyboard Hint -->
@@ -121,15 +129,15 @@
     <div class="project-stats mt-20">
       <div class="stats-container animate-fade-in-up">
         <div class="stat-item">
-          <div class="stat-value">{{ projects.length }}</div>
+          <div class="stat-value">{{ projects().length }}</div>
           <div class="stat-label">Featured Projects</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">{{ getTotalTechnologies() }}</div>
+          <div class="stat-value">{{ totalTechnologies() }}</div>
           <div class="stat-label">Technologies</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">3</div>
+          <div class="stat-value">{{ liveDemoCount() }}</div>
           <div class="stat-label">Live Demos</div>
         </div>
       </div>
