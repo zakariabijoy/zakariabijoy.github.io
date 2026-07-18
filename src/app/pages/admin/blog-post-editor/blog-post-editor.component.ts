@@ -66,7 +66,11 @@ import { estimateReadingTimeMinutes, sanitizeBlogHtml, slugify } from '../../../
 
           <div class="form-group md:col-span-2">
             <label class="form-label">Content *</label>
-            <p-editor formControlName="content_html" [style]="{ height: '360px' }" />
+            <p-editor
+              formControlName="content_html"
+              styleClass="blog-rich-editor"
+              [style]="{ height: '360px' }"
+            />
             <p class="text-xs text-white/40 mt-1">
               Estimated reading time: {{ readingMinutes() }} min
             </p>

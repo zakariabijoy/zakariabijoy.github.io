@@ -127,6 +127,9 @@ export interface BlogComment {
   body: string;
   status: BlogCommentStatus;
   created_at?: string;
+  /** Joined from blog_posts for admin moderation UI — not a DB column. */
+  post_title?: string | null;
+  post_slug?: string | null;
 }
 
 export interface BlogReaction {

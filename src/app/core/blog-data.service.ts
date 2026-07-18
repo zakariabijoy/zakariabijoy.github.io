@@ -417,12 +417,22 @@ export class BlogDataService {
     const supabase = await this.client();
     let q = supabase
       .from('blog_comments')
-      .select('*')
+      .select('*, post:blog_posts(title, slug)')
       .order('created_at', { ascending: false });
     if (status) q = q.eq('status', status);
     const { data, error } = await q;
     if (error) throw error;
-    return (data ?? []) as BlogComment[];
+
+    return (data ?? []).map((row) => {
+      const post = row.post as { title?: string; slug?: string } | { title?: string; slug?: string }[] | null;
+      const resolved = Array.isArray(post) ? post[0] : post;
+      const { post: _join, ...comment } = row as BlogComment & { post?: unknown };
+      return {
+        ...comment,
+        post_title: resolved?.title ?? null,
+        post_slug: resolved?.slug ?? null,
+      };
+    });
   }
 
   async adminUpdateCommentStatus(id: string, status: BlogCommentStatus): Promise<void> {

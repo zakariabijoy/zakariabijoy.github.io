@@ -573,6 +573,142 @@ app-admin-login .glass-card:hover,
   color: #e6eef2;
 }
 
+.admin-table .p-paginator {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* Dark Quill / PrimeNG Editor inside admin forms */
+.admin-form .p-editor,
+.admin-form .p-editor.p-component,
+.admin-form .p-editor-container {
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  overflow: hidden;
+  background: #0b1210 !important;
+}
+
+.admin-form .p-editor .p-editor-toolbar,
+.admin-form .ql-toolbar.ql-snow {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: var(--fg) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-stroke {
+  stroke: rgba(255, 255, 255, 0.7) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-fill,
+.admin-form .ql-toolbar.ql-snow .ql-stroke.ql-fill {
+  fill: rgba(255, 255, 255, 0.7) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-picker {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-picker-label {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-picker-options {
+  background: #0f1613 !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+  color: var(--fg) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow .ql-picker-item {
+  color: var(--fg) !important;
+}
+
+.admin-form .ql-toolbar.ql-snow button:hover .ql-stroke,
+.admin-form .ql-toolbar.ql-snow .ql-picker-label:hover .ql-stroke {
+  stroke: var(--brand-300) !important;
+}
+
+.admin-form .p-editor .p-editor-content,
+.admin-form .ql-container,
+.admin-form .ql-container.ql-snow {
+  border: none !important;
+  background: #0b1210 !important;
+  color: var(--fg) !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+}
+
+/* Quill paints the editable surface on .ql-editor — force dark there. */
+.admin-form .ql-editor,
+.admin-form .ql-container .ql-editor,
+.admin-form .p-editor-content .ql-editor {
+  min-height: 280px;
+  background: #0b1210 !important;
+  color: #eafaf1 !important;
+  caret-color: var(--brand-400);
+}
+
+.admin-form .ql-editor p,
+.admin-form .ql-editor li,
+.admin-form .ql-editor h1,
+.admin-form .ql-editor h2,
+.admin-form .ql-editor h3,
+.admin-form .ql-editor h4 {
+  color: #eafaf1 !important;
+}
+
+.admin-form .ql-editor a {
+  color: var(--brand-300) !important;
+}
+
+.admin-form .ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.35) !important;
+  font-style: normal !important;
+}
+
+.admin-form .ql-snow .ql-editor pre.ql-syntax,
+.admin-form .ql-editor pre {
+  background: #06110c !important;
+  color: #e6eef2 !important;
+  border-radius: 8px;
+}
+
+.admin-form .ql-editor blockquote {
+  border-left: 3px solid var(--brand-400);
+  color: rgba(234, 250, 241, 0.75) !important;
+}
+
+.admin-form .ql-tooltip {
+  background: #0f1613 !important;
+  color: var(--fg) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.admin-form .ql-tooltip input[type='text'] {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--fg) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Extra specificity for PrimeNG styleClass on the editor root */
+.admin-form .blog-rich-editor,
+.admin-form .blog-rich-editor .ql-container,
+.admin-form .blog-rich-editor .ql-editor,
+.blog-rich-editor .ql-container,
+.blog-rich-editor .ql-editor,
+.blog-rich-editor .p-editor-content {
+  background: #0b1210 !important;
+  color: #eafaf1 !important;
+}
+
+.blog-rich-editor .ql-toolbar.ql-snow {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: none !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
 @media (max-width: 767px) {
   .card-panel,
   .card-contact {

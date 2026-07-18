@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -11,10 +12,10 @@ import { BlogComment, BlogCommentStatus } from '../../../core/models';
 @Component({
   standalone: true,
   selector: 'app-blog-comments',
-  imports: [CommonModule, FormsModule, TableModule, TagModule, SelectModule],
+  imports: [CommonModule, FormsModule, RouterLink, TableModule, TagModule, SelectModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="card-panel">
+    <div class="card-panel admin-table">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 class="card-heading">Comments</h2>
@@ -41,26 +42,37 @@ import { BlogComment, BlogCommentStatus } from '../../../core/models';
       } @else if (!comments().length) {
         <p class="text-sm text-white/50">No comments in this filter.</p>
       } @else {
-        <p-table [value]="comments()" [paginator]="comments().length > 15" [rows]="15" styleClass="p-datatable-sm">
-          <ng-template pTemplate="header">
+        <p-table [value]="comments()" [paginator]="comments().length > 15" [rows]="15" size="small" stripedRows>
+          <ng-template #header>
             <tr>
               <th>Author</th>
+              <th>Post</th>
               <th>Comment</th>
               <th>Status</th>
               <th>Date</th>
               <th style="width: 12rem"></th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-c>
+          <ng-template #body let-c>
             <tr>
               <td>
                 <div class="font-medium">{{ c.author_name }}</div>
                 <div class="text-xs text-white/40">{{ c.author_email }}</div>
-                <div class="text-xs text-white/30 mt-1">post: {{ c.post_id | slice: 0:8 }}…</div>
+              </td>
+              <td class="text-sm max-w-[12rem]">
+                @if (c.post_title) {
+                  <a [routerLink]="['/admin/posts', c.post_id]" class="text-brand-400 hover:underline line-clamp-2">
+                    {{ c.post_title }}
+                  </a>
+                } @else {
+                  <span class="text-white/40">—</span>
+                }
               </td>
               <td class="text-sm whitespace-pre-wrap max-w-md">{{ c.body }}</td>
               <td><p-tag [value]="c.status" [severity]="severity(c.status)" /></td>
-              <td class="text-sm text-white/60">{{ c.created_at | date: 'medium' }}</td>
+              <td class="text-sm text-white/60">
+                {{ c.created_at ? (c.created_at | date: 'MMM d, y, h:mm a') : '—' }}
+              </td>
               <td>
                 <div class="flex flex-wrap gap-2 justify-end">
                   @if (c.status !== 'approved') {

@@ -13,7 +13,7 @@ import { BlogPost } from '../../../core/models';
   imports: [CommonModule, RouterLink, TableModule, TagModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="card-panel">
+    <div class="card-panel admin-table">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
         <div>
           <h2 class="card-heading">Blog posts</h2>
@@ -30,8 +30,8 @@ import { BlogPost } from '../../../core/models';
       } @else if (!posts().length) {
         <p class="text-sm text-white/50">No posts yet. Create your first article.</p>
       } @else {
-        <p-table [value]="posts()" [paginator]="posts().length > 10" [rows]="10" styleClass="p-datatable-sm">
-          <ng-template pTemplate="header">
+        <p-table [value]="posts()" [paginator]="posts().length > 10" [rows]="10" size="small" stripedRows>
+          <ng-template #header>
             <tr>
               <th>Title</th>
               <th>Status</th>
@@ -40,7 +40,7 @@ import { BlogPost } from '../../../core/models';
               <th style="width: 8rem"></th>
             </tr>
           </ng-template>
-          <ng-template pTemplate="body" let-post>
+          <ng-template #body let-post>
             <tr>
               <td>
                 <div class="font-medium">{{ post.title }}</div>
@@ -50,10 +50,10 @@ import { BlogPost } from '../../../core/models';
                 <p-tag [value]="post.status" [severity]="severity(post.status)" />
               </td>
               <td class="text-sm text-white/60">
-                {{ post.published_at ? (post.published_at | date: 'mediumDate') : '—' }}
+                {{ post.published_at ? (post.published_at | date: 'MMM d, y') : '—' }}
               </td>
               <td class="text-sm text-white/60">
-                {{ post.updated_at ? (post.updated_at | date: 'mediumDate') : '—' }}
+                {{ post.updated_at ? (post.updated_at | date: 'MMM d, y') : '—' }}
               </td>
               <td>
                 <div class="flex gap-2 justify-end">
