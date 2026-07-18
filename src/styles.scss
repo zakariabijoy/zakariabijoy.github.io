@@ -198,6 +198,400 @@ body {
     inset 0 1px 0 rgba(255, 255, 255, 0.15);
 }
 
+/* Admin panels: no hover lift */
+app-admin-layout .glass-card:hover,
+app-admin-login .glass-card:hover,
+.card-panel:hover {
+  background: linear-gradient(180deg, rgba(6, 10, 16, 0.95), rgba(4, 6, 10, 0.9));
+  transform: none;
+  box-shadow:
+    0 20px 40px rgba(2, 6, 23, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ── Shared form / panel language (contact + admin) ── */
+.card-panel,
+.card-contact {
+  background: linear-gradient(180deg, rgba(6, 10, 16, 0.95), rgba(4, 6, 10, 0.9));
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow:
+    0 20px 40px rgba(2, 6, 23, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px);
+  position: relative;
+}
+
+.card-panel::before,
+.card-contact::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 224, 138, 0.3), transparent);
+  pointer-events: none;
+}
+
+.card-panel {
+  padding: 1.5rem;
+}
+
+.card-heading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #00e08a, #00d07a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.card-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #e6eef2;
+  margin-bottom: 0.25rem;
+}
+
+.form-input,
+.form-textarea,
+.admin-form input.p-inputtext,
+.admin-form textarea.p-textarea,
+.admin-form .p-password-input,
+.admin-form .p-inputnumber-input,
+.admin-form .p-select {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.03) !important;
+  border: 2px solid rgba(255, 255, 255, 0.08) !important;
+  padding: 0.875rem 1rem !important;
+  border-radius: 8px !important;
+  color: #e6eef2 !important;
+  font-size: 0.95rem !important;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(10px);
+  box-shadow: none !important;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder,
+.admin-form input::placeholder,
+.admin-form textarea::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.9rem;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.admin-form input.p-inputtext:focus,
+.admin-form textarea.p-textarea:focus,
+.admin-form .p-password-input:focus,
+.admin-form .p-inputnumber-input:focus,
+.admin-form .p-select.p-focus {
+  outline: none !important;
+  border-color: var(--brand-400, #00e08a) !important;
+  box-shadow: 0 0 0 3px rgba(0, 224, 138, 0.1) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.form-input:disabled,
+.form-textarea:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.5;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.form-note {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+.field-error {
+  font-size: 0.8rem;
+  color: #fca5a5;
+  animation: form-shake 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes form-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.form-hint {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.btn-send {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 56px;
+  width: 100%;
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, var(--brand-500), var(--brand-400));
+  color: #000;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 4px 15px rgba(16, 185, 129, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.btn-send::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn-send:hover:not(:disabled)::before {
+  left: 100%;
+}
+
+.btn-send:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow:
+    0 8px 25px rgba(16, 185, 129, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.btn-send:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-send:disabled,
+.btn-send.loading {
+  opacity: 0.7;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-send.btn-send--sm {
+  min-height: 44px;
+  width: auto;
+  padding: 0.75rem 1.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-send .loading-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #071217;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: form-spin 1s linear infinite;
+}
+
+@keyframes form-spin {
+  to { transform: rotate(360deg); }
+}
+
+.success-message,
+.error-message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-top: 1rem;
+  animation: form-slide-in 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.success-message {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid var(--brand-400);
+  color: var(--brand-300);
+}
+
+.success-message i {
+  font-size: 1.25rem;
+  color: var(--brand-400);
+}
+
+.error-message {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid #f87171;
+  color: #fca5a5;
+}
+
+.error-message i {
+  font-size: 1.25rem;
+  color: #f87171;
+}
+
+@keyframes form-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Admin password field full-width */
+.admin-form .p-password,
+.admin-form .p-password-input {
+  width: 100%;
+}
+
+.admin-form .p-password .p-inputtext {
+  width: 100%;
+}
+
+.admin-form .p-inputnumber,
+.admin-form .p-select {
+  width: 100%;
+}
+
+/* Admin dialog shell */
+.p-dialog.admin-dialog {
+  background: linear-gradient(180deg, rgba(6, 10, 16, 0.98), rgba(4, 6, 10, 0.96)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 20px 40px rgba(2, 6, 23, 0.5) !important;
+}
+
+.p-dialog.admin-dialog .p-dialog-header {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: var(--fg) !important;
+  padding: 1.25rem 1.5rem !important;
+}
+
+.p-dialog.admin-dialog .p-dialog-title {
+  font-weight: 700;
+  background: linear-gradient(135deg, #00e08a, #00d07a);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.p-dialog.admin-dialog .p-dialog-content {
+  background: transparent !important;
+  color: var(--fg) !important;
+  padding: 1.25rem 1.5rem 1.5rem !important;
+}
+
+/* Admin table theme */
+.admin-table .p-datatable {
+  background: transparent;
+}
+
+.admin-table .p-datatable .p-datatable-thead > tr > th {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.875rem 1rem !important;
+}
+
+.admin-table .p-datatable .p-datatable-tbody > tr {
+  background: transparent !important;
+  color: var(--fg) !important;
+  transition: background 0.15s ease;
+}
+
+.admin-table .p-datatable .p-datatable-tbody > tr > td {
+  border-color: rgba(255, 255, 255, 0.05) !important;
+  padding: 0.875rem 1rem !important;
+  color: #e6eef2;
+}
+
+.admin-table .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) {
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.admin-table .p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(16, 185, 129, 0.06) !important;
+}
+
+.admin-table .p-datatable .p-datatable-tbody > tr.p-datatable-row-selected {
+  background: rgba(16, 185, 129, 0.1) !important;
+}
+
+.admin-table .p-datatable-emptymessage td {
+  color: rgba(255, 255, 255, 0.45) !important;
+}
+
+.admin-table .admin-expanded {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  color: #e6eef2;
+}
+
+@media (max-width: 767px) {
+  .card-panel,
+  .card-contact {
+    padding: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-input,
+  .form-textarea,
+  .btn-send {
+    transition: none !important;
+  }
+
+  .btn-send::before {
+    display: none;
+  }
+}
+
 /* Button enhancements */
 .btn-primary {
   @apply relative overflow-hidden px-8 py-3 rounded-lg font-semibold;

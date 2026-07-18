@@ -6,8 +6,6 @@ import { ConfirmationService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -26,14 +24,19 @@ type Row = Record<string, unknown>;
   selector: 'app-admin-crud',
   imports: [
     CommonModule, ReactiveFormsModule, TableModule, DialogModule, ButtonModule,
-    InputTextModule, TextareaModule, InputNumberModule, SelectModule, ToggleSwitchModule, TagModule,
+    InputNumberModule, SelectModule, ToggleSwitchModule, TagModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="glass-card p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">{{ config.title }}</h2>
-        <p-button icon="pi pi-plus" label="Add" (onClick)="openNew()" />
+    <div class="card-panel admin-table">
+      <div class="flex items-center justify-between mb-6 gap-4 flex-wrap">
+        <div>
+          <h2 class="card-heading !mb-0">{{ config.title }}</h2>
+        </div>
+        <button type="button" class="btn-send btn-send--sm !w-auto" (click)="openNew()">
+          <i class="pi pi-plus"></i>
+          <span>Add</span>
+        </button>
       </div>
 
       <p-table [value]="rows()" [loading]="loading()" dataKey="id" size="small" stripedRows>
@@ -65,28 +68,34 @@ type Row = Record<string, unknown>;
           </tr>
         </ng-template>
         <ng-template #emptymessage>
-          <tr><td [attr.colspan]="config.listColumns.length + 1" class="text-center py-8 text-gray-400">No rows yet.</td></tr>
+          <tr><td [attr.colspan]="config.listColumns.length + 1" class="text-center py-8">No rows yet.</td></tr>
         </ng-template>
       </p-table>
     </div>
 
-    <p-dialog [(visible)]="dialogVisible" [modal]="true" [style]="{ width: '34rem', maxWidth: '95vw' }"
-              [header]="editingId ? 'Edit ' + config.title : 'New ' + config.title" (onHide)="form = null">
+    <p-dialog
+      [(visible)]="dialogVisible"
+      [modal]="true"
+      [style]="{ width: '34rem', maxWidth: '95vw' }"
+      [header]="editingId ? 'Edit ' + config.title : 'New ' + config.title"
+      styleClass="admin-dialog"
+      (onHide)="form = null"
+    >
       @if (form; as f) {
-        <form [formGroup]="f" (ngSubmit)="save()" class="flex flex-col gap-4 pt-2">
+        <form [formGroup]="f" (ngSubmit)="save()" class="admin-form flex flex-col gap-4 pt-1">
           @for (field of config.fields; track field.key) {
-            <div class="flex flex-col gap-1">
-              <label [for]="field.key" class="text-sm font-medium">{{ field.label }}{{ field.required ? ' *' : '' }}</label>
+            <div class="form-group">
+              <label [for]="field.key" class="form-label">{{ field.label }}{{ field.required ? ' *' : '' }}</label>
 
               @switch (field.type) {
                 @case ('text') {
-                  <input pInputText [id]="field.key" [formControlName]="field.key" class="w-full" />
+                  <input [id]="field.key" [formControlName]="field.key" class="form-input" />
                 }
                 @case ('textarea') {
-                  <textarea pTextarea [id]="field.key" [formControlName]="field.key" rows="4" class="w-full"></textarea>
+                  <textarea [id]="field.key" [formControlName]="field.key" class="form-textarea" rows="4"></textarea>
                 }
                 @case ('lines') {
-                  <textarea pTextarea [id]="field.key" [formControlName]="field.key" rows="5" class="w-full font-mono text-sm"></textarea>
+                  <textarea [id]="field.key" [formControlName]="field.key" class="form-textarea font-mono text-sm" rows="5"></textarea>
                 }
                 @case ('number') {
                   <p-inputnumber [inputId]="field.key" [formControlName]="field.key" [showButtons]="true" styleClass="w-full" />
@@ -100,17 +109,28 @@ type Row = Record<string, unknown>;
               }
 
               @if (field.hint) {
-                <small class="text-gray-400">{{ field.hint }}</small>
+                <small class="form-hint">{{ field.hint }}</small>
               }
               @if (f.controls[field.key].invalid && f.controls[field.key].touched) {
-                <small class="text-red-400">{{ field.label }} is required.</small>
+                <div class="field-error">{{ field.label }} is required.</div>
               }
             </div>
           }
 
-          <div class="flex justify-end gap-2 mt-2">
-            <p-button label="Cancel" severity="secondary" [text]="true" (onClick)="dialogVisible = false" />
-            <p-button label="Save" type="submit" [loading]="saving()" />
+          <div class="flex justify-end gap-3 mt-2">
+            <button type="button" class="text-sm font-medium text-white/60 hover:text-white px-4 py-2 transition-colors" (click)="dialogVisible = false">
+              Cancel
+            </button>
+            <button class="btn-send btn-send--sm !w-auto" type="submit" [disabled]="saving()" [class.loading]="saving()">
+              @if (!saving()) {
+                <span>Save</span>
+              } @else {
+                <span class="flex items-center gap-2">
+                  <span class="loading-spinner"></span>
+                  <span>Saving...</span>
+                </span>
+              }
+            </button>
           </div>
         </form>
       }

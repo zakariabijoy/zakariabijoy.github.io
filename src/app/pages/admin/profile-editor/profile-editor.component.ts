@@ -2,9 +2,6 @@ import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@ang
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { supabase } from '../../../core/supabase.client';
 import { Profile } from '../../../core/models';
@@ -12,78 +9,91 @@ import { Profile } from '../../../core/models';
 @Component({
   standalone: true,
   selector: 'app-profile-editor',
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, TextareaModule, InputNumberModule],
+  imports: [CommonModule, ReactiveFormsModule, InputNumberModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="glass-card p-6 max-w-3xl">
-      <h2 class="text-2xl font-bold mb-6">Profile</h2>
+    <div class="card-panel max-w-3xl">
+      <h2 class="card-heading">Profile</h2>
+      <p class="card-subtitle">Update the public profile shown across the site.</p>
 
-      <form [formGroup]="form" (ngSubmit)="save()" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="flex flex-col gap-1 md:col-span-2">
-          <label for="full_name" class="text-sm font-medium">Full name *</label>
-          <input pInputText id="full_name" formControlName="full_name" />
+      <form [formGroup]="form" (ngSubmit)="save()" class="admin-form grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="form-group md:col-span-2">
+          <label for="full_name" class="form-label">Full name *</label>
+          <input id="full_name" formControlName="full_name" class="form-input" placeholder="Your full name" />
         </div>
-        <div class="flex flex-col gap-1 md:col-span-2">
-          <label for="headline" class="text-sm font-medium">Headline *</label>
-          <input pInputText id="headline" formControlName="headline" />
+        <div class="form-group md:col-span-2">
+          <label for="headline" class="form-label">Headline *</label>
+          <input id="headline" formControlName="headline" class="form-input" placeholder="Short professional headline" />
         </div>
-        <div class="flex flex-col gap-1 md:col-span-2">
-          <label for="bio" class="text-sm font-medium">Bio</label>
-          <textarea pTextarea id="bio" formControlName="bio" rows="5"></textarea>
-        </div>
-
-        <div class="flex flex-col gap-1">
-          <label for="email" class="text-sm font-medium">Email *</label>
-          <input pInputText id="email" formControlName="email" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="location" class="text-sm font-medium">Location</label>
-          <input pInputText id="location" formControlName="location" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="phone" class="text-sm font-medium">Phone</label>
-          <input pInputText id="phone" formControlName="phone" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="phone_alt" class="text-sm font-medium">Phone (alt)</label>
-          <input pInputText id="phone_alt" formControlName="phone_alt" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="nationality" class="text-sm font-medium">Nationality</label>
-          <input pInputText id="nationality" formControlName="nationality" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="blood_group" class="text-sm font-medium">Blood group</label>
-          <input pInputText id="blood_group" formControlName="blood_group" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="freelance_status" class="text-sm font-medium">Freelance status</label>
-          <input pInputText id="freelance_status" formControlName="freelance_status" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="resume_url" class="text-sm font-medium">Resume URL</label>
-          <input pInputText id="resume_url" formControlName="resume_url" />
-        </div>
-        <div class="flex flex-col gap-1">
-          <label for="avatar_url" class="text-sm font-medium">Avatar URL</label>
-          <input pInputText id="avatar_url" formControlName="avatar_url" />
+        <div class="form-group md:col-span-2">
+          <label for="bio" class="form-label">Bio</label>
+          <textarea id="bio" formControlName="bio" class="form-textarea" rows="5" placeholder="A short bio about yourself"></textarea>
         </div>
 
-        <div class="flex flex-col gap-1">
-          <label for="years_experience" class="text-sm font-medium">Years experience</label>
-          <p-inputnumber inputId="years_experience" formControlName="years_experience" [showButtons]="true" />
+        <div class="form-group">
+          <label for="email" class="form-label">Email *</label>
+          <input id="email" formControlName="email" class="form-input" type="email" placeholder="your.email@example.com" />
         </div>
-        <div class="flex flex-col gap-1">
-          <label for="projects_count" class="text-sm font-medium">Projects count</label>
-          <p-inputnumber inputId="projects_count" formControlName="projects_count" [showButtons]="true" />
+        <div class="form-group">
+          <label for="location" class="form-label">Location</label>
+          <input id="location" formControlName="location" class="form-input" placeholder="City, Country" />
         </div>
-        <div class="flex flex-col gap-1">
-          <label for="companies_count" class="text-sm font-medium">Companies count</label>
-          <p-inputnumber inputId="companies_count" formControlName="companies_count" [showButtons]="true" />
+        <div class="form-group">
+          <label for="phone" class="form-label">Phone</label>
+          <input id="phone" formControlName="phone" class="form-input" type="tel" placeholder="+880 1XXX-XXXXXX" />
+        </div>
+        <div class="form-group">
+          <label for="phone_alt" class="form-label">Phone (alt)</label>
+          <input id="phone_alt" formControlName="phone_alt" class="form-input" type="tel" />
+        </div>
+        <div class="form-group">
+          <label for="nationality" class="form-label">Nationality</label>
+          <input id="nationality" formControlName="nationality" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="blood_group" class="form-label">Blood group</label>
+          <input id="blood_group" formControlName="blood_group" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label for="freelance_status" class="form-label">Freelance status</label>
+          <input id="freelance_status" formControlName="freelance_status" class="form-input" placeholder="Available / Busy" />
+        </div>
+        <div class="form-group">
+          <label for="resume_url" class="form-label">Resume URL</label>
+          <input id="resume_url" formControlName="resume_url" class="form-input" placeholder="https://" />
+        </div>
+        <div class="form-group md:col-span-2">
+          <label for="avatar_url" class="form-label">Avatar URL</label>
+          <input id="avatar_url" formControlName="avatar_url" class="form-input" placeholder="https://" />
+        </div>
+
+        <div class="form-group">
+          <label for="years_experience" class="form-label">Years experience</label>
+          <p-inputnumber inputId="years_experience" formControlName="years_experience" [showButtons]="true" styleClass="w-full" />
+        </div>
+        <div class="form-group">
+          <label for="projects_count" class="form-label">Projects count</label>
+          <p-inputnumber inputId="projects_count" formControlName="projects_count" [showButtons]="true" styleClass="w-full" />
+        </div>
+        <div class="form-group">
+          <label for="companies_count" class="form-label">Companies count</label>
+          <p-inputnumber inputId="companies_count" formControlName="companies_count" [showButtons]="true" styleClass="w-full" />
         </div>
 
         <div class="md:col-span-2 flex justify-end mt-2">
-          <p-button label="Save profile" type="submit" [loading]="saving()" />
+          <button class="btn-send btn-send--sm !w-auto" type="submit" [disabled]="saving()" [class.loading]="saving()">
+            @if (!saving()) {
+              <span class="flex items-center gap-2">
+                <i class="pi pi-check"></i>
+                <span>Save profile</span>
+              </span>
+            } @else {
+              <span class="flex items-center gap-2">
+                <span class="loading-spinner"></span>
+                <span>Saving...</span>
+              </span>
+            }
+          </button>
         </div>
       </form>
     </div>

@@ -22,9 +22,9 @@ import { AdminDataService } from '../shared/admin-data.service';
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Sidebar -->
         <aside class="lg:w-56 flex-shrink-0">
-          <div class="glass-card p-4 lg:sticky lg:top-24">
+          <div class="card-panel !p-4 lg:sticky lg:top-24">
             <div class="flex items-center justify-between mb-4 px-2">
-              <span class="font-bold text-lg">Admin</span>
+              <span class="card-heading !text-lg !mb-0">Admin</span>
               <p-button icon="pi pi-sign-out" severity="secondary" [text]="true" size="small"
                         (onClick)="signOut()" ariaLabel="Sign out" />
             </div>

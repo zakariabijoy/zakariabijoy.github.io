@@ -13,9 +13,9 @@ import { ContactMessage } from '../../../core/models';
   imports: [CommonModule, DatePipe, TableModule, ButtonModule, TagModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="glass-card p-6">
-      <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold">Messages</h2>
+    <div class="card-panel admin-table">
+      <div class="flex items-center justify-between mb-6 gap-4 flex-wrap">
+        <h2 class="card-heading !mb-0">Messages</h2>
         @if (unreadCount() > 0) {
           <p-tag severity="info" [value]="unreadCount() + ' unread'" />
         }
@@ -41,7 +41,7 @@ import { ContactMessage } from '../../../core/models';
             </td>
             <td>{{ msg.first_name }} {{ msg.last_name }}</td>
             <td><a [href]="'mailto:' + msg.email" class="text-brand-400 hover:underline">{{ msg.email }}</a></td>
-            <td>{{ msg.created_at | date: 'MMM d, y, h:mm a' }}</td>
+            <td class="text-white/60">{{ msg.created_at | date: 'MMM d, y, h:mm a' }}</td>
             <td>
               <p-tag [severity]="msg.is_read ? 'secondary' : 'info'" [value]="msg.is_read ? 'Read' : 'New'" />
             </td>
@@ -58,9 +58,9 @@ import { ContactMessage } from '../../../core/models';
         <ng-template #expandedrow let-msg>
           <tr>
             <td colspan="6">
-              <div class="p-4 text-sm leading-relaxed whitespace-pre-wrap bg-white/5 rounded-lg m-2">
+              <div class="admin-expanded">
                 @if (msg.phone) {
-                  <div class="text-gray-400 mb-2">Phone: {{ msg.phone }}</div>
+                  <div class="text-white/50 mb-2">Phone: {{ msg.phone }}</div>
                 }
                 {{ msg.message }}
               </div>
@@ -68,7 +68,7 @@ import { ContactMessage } from '../../../core/models';
           </tr>
         </ng-template>
         <ng-template #emptymessage>
-          <tr><td colspan="6" class="text-center py-8 text-gray-400">No messages yet.</td></tr>
+          <tr><td colspan="6" class="text-center py-8">No messages yet.</td></tr>
         </ng-template>
       </p-table>
     </div>

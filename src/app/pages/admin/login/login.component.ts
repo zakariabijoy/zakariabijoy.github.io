@@ -2,41 +2,75 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
-import { MessageModule } from 'primeng/message';
 import { AuthService } from '../../../core/auth.service';
 
 @Component({
   standalone: true,
   selector: 'app-admin-login',
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, InputTextModule, PasswordModule, MessageModule],
+  imports: [CommonModule, ReactiveFormsModule, PasswordModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="min-h-[70vh] flex items-center justify-center py-20">
-      <div class="glass-card p-8 w-full max-w-md">
-        <h1 class="text-2xl font-bold mb-2">Admin Login</h1>
-        <p class="text-gray-400 text-sm mb-6">Sign in to manage portfolio content.</p>
+    <div class="min-h-[70vh] flex items-center justify-center py-20 px-4">
+      <div class="card-panel w-full max-w-md">
+        <h1 class="card-heading text-2xl">Admin Login</h1>
+        <p class="card-subtitle">Sign in to manage portfolio content.</p>
 
-        <form [formGroup]="form" (ngSubmit)="signIn()" class="flex flex-col gap-4">
-          <div class="flex flex-col gap-1">
-            <label for="email" class="text-sm font-medium">Email</label>
-            <input pInputText id="email" type="email" formControlName="email" autocomplete="username" />
+        <form [formGroup]="form" (ngSubmit)="signIn()" class="admin-form flex flex-col gap-5">
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address *</label>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="form-input"
+              autocomplete="username"
+              placeholder="your.email@example.com"
+            />
+            @if (form.controls.email.invalid && form.controls.email.touched) {
+              <div class="field-error">Enter a valid email.</div>
+            }
           </div>
 
-          <div class="flex flex-col gap-1">
-            <label for="password" class="text-sm font-medium">Password</label>
-            <p-password inputId="password" formControlName="password" [feedback]="false"
-                        [toggleMask]="true" styleClass="w-full" inputStyleClass="w-full"
-                        autocomplete="current-password" />
+          <div class="form-group">
+            <label for="password" class="form-label">Password *</label>
+            <p-password
+              inputId="password"
+              formControlName="password"
+              [feedback]="false"
+              [toggleMask]="true"
+              styleClass="w-full"
+              inputStyleClass="form-input w-full"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+            />
+            @if (form.controls.password.invalid && form.controls.password.touched) {
+              <div class="field-error">Password is required.</div>
+            }
           </div>
 
           @if (error(); as err) {
-            <p-message severity="error" [text]="err" />
+            <div class="error-message !mt-0">
+              <i class="pi pi-exclamation-triangle"></i>
+              <span>{{ err }}</span>
+            </div>
           }
 
-          <p-button label="Sign in" type="submit" [loading]="loading()" styleClass="w-full mt-2" />
+          <div class="form-actions !mt-2">
+            <button class="btn-send" type="submit" [disabled]="loading()" [class.loading]="loading()">
+              @if (!loading()) {
+                <span class="flex items-center gap-2">
+                  <i class="pi pi-sign-in"></i>
+                  <span>Sign in</span>
+                </span>
+              } @else {
+                <span class="flex items-center gap-2">
+                  <span class="loading-spinner"></span>
+                  <span>Signing in...</span>
+                </span>
+              }
+            </button>
+          </div>
         </form>
       </div>
     </div>
