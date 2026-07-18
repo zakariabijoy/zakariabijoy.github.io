@@ -3,3 +3,5 @@
 /resume
 /contact
 /blog
+/blog/angular-signals-for-portfolio-scale-uis
+/blog/building-clean-apis-with-dotnet-and-cqrs
