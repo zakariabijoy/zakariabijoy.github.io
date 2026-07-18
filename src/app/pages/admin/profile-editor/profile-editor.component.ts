@@ -61,7 +61,7 @@ import { Profile } from '../../../core/models';
         </div>
 
         <div class="form-group md:col-span-2">
-          <label class="form-label">Avatar</label>
+          <span class="form-label">Avatar</span>
           <div class="flex flex-col sm:flex-row gap-4 items-start">
             @if (form.controls.avatar_url.value) {
               <img
@@ -112,7 +112,7 @@ import { Profile } from '../../../core/models';
         </div>
 
         <div class="form-group md:col-span-2">
-          <label class="form-label">Resume (PDF)</label>
+          <span class="form-label">Resume (PDF)</span>
           <input
             #resumeInput
             type="file"

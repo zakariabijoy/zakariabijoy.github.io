@@ -65,7 +65,7 @@ import { estimateReadingTimeMinutes, sanitizeBlogHtml, slugify } from '../../../
           </div>
 
           <div class="form-group md:col-span-2">
-            <label class="form-label">Content *</label>
+            <span class="form-label">Content *</span>
             <p-editor
               formControlName="content_html"
               styleClass="blog-rich-editor"
@@ -77,7 +77,7 @@ import { estimateReadingTimeMinutes, sanitizeBlogHtml, slugify } from '../../../
           </div>
 
           <div class="form-group md:col-span-2">
-            <label class="form-label">Cover image</label>
+            <span class="form-label">Cover image</span>
             <div class="flex flex-col sm:flex-row gap-4 items-start">
               @if (form.controls.cover_image_url.value) {
                 <img

@@ -14,6 +14,12 @@ module.exports = tseslint.config(
     ],
     processor: angular.processInlineTemplates,
     rules: {
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        // Destructuring a key solely to exclude it from a rest spread (e.g.
+        // `const { post: _join, ...rest } = row`) is intentional, not dead code.
+        { ignoreRestSiblings: true },
+      ],
       "@angular-eslint/directive-selector": [
         "error",
         {
