@@ -40,6 +40,7 @@ See also [`FULL-BLOG-FEATURE-PLAN.md`](FULL-BLOG-FEATURE-PLAN.md) for the origin
 | Lint: 5 pre-existing errors | **Fixed & committed** (`b5f70b5`) | `ignoreRestSiblings: true` added to `no-unused-vars` for the intentional `post: _join` destructure; the 4 `label-has-associated-control` errors fixed by swapping group-heading `<label>`s (over composite widgets, not single controls) to `<span>`. |
 | CLAUDE.md staleness | **Fixed & committed** (`10f67c2`) | Was documenting the broken `main.ts` snippet as correct — a future session could have "fixed" the real config back to broken. Added the admin design-system note and `MediaService` mention. |
 | Working-tree hygiene | **Resolved** | An earlier turn overwrote the committed (Cursor) `admin-crud.component.ts` with a simpler version, losing image-upload support. Restored via `git checkout HEAD -- <file>`. **Lesson: check `git log`/`git diff` against HEAD before rewriting any file that might have been touched by another tool/session.** |
+| `p-select` overlay clipping | **Fixed & committed** (`e60ce55`, `cb6a43f`) | Every `p-select` in the codebase lacked `appendTo="body"`, so its dropdown overlay rendered inline in the DOM instead of portaling to `<body>`. Inside `admin-crud.component.ts`'s dialog, options falling outside the dialog's stacking boundary hit-tested to the modal's semi-transparent backdrop mask instead of the option row — visually, sibling form-field text bled through the dropdown list. The same root cause also hit `blog-post-editor.component.ts`'s Status select (no dialog involved — an in-flow textarea below it painted over the third option) and `blog-comments.component.ts`'s filter select. Found by logging into the live admin panel and testing every `p-select`, not just the one inside a dialog; confirmed via `elementFromPoint` hit-testing on each option before/after. |
 
 ## 4. Verification status (last checked 2026-07-18)
 
@@ -47,10 +48,8 @@ See also [`FULL-BLOG-FEATURE-PLAN.md`](FULL-BLOG-FEATURE-PLAN.md) for the origin
 - `ng test` — 14/14 passing.
 - `ng lint` — clean, no errors.
 - Supabase live data — verified end-to-end (anon read on content tables, RLS blocks anon read on `contact_messages`, contact form insert confirmed working against production Supabase project).
-- Admin login form — verified via computed styles (dark glass inputs, emerald gradient button matching Contact page).
-- Admin CRUD/blog screens — **still not visually verified** (require login credentials Claude doesn't have); should look correct given they share the same CSS classes verified on the login page, but need a human check.
+- Admin panel — **fully visually verified** (logged in): Messages, Projects (incl. edit dialog, image upload, number/toggle/select fields), Education (incl. category dropdown), Experience, Skills, Social Links, Profile, Blog Posts (incl. Quill rich-text editor), Comments moderation. Zero console errors across every screen.
 
 ## 5. Next steps
 
-1. Log into `/admin` and visually confirm the Projects/Experience/Education/Skills/Social Links tables and the Blog admin screens render correctly with the theme fix — the one item Claude can't self-verify.
-2. Deploy via `npm run github-deploy` once the above is confirmed. Not run automatically — it pushes to the live `gh-pages` branch and needs explicit go-ahead.
+1. Deploy via `npm run github-deploy` when ready. Not run automatically — it pushes to the live `gh-pages` branch and needs explicit go-ahead.
