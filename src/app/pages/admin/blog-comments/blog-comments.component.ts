@@ -21,7 +21,7 @@ import { BlogComment, BlogCommentStatus } from '../../../core/models';
           <h2 class="card-heading">Comments</h2>
           <p class="card-subtitle">Moderate guest comments before they appear publicly.</p>
         </div>
-        <div class="flex flex-wrap gap-3 items-center">
+        <div class="flex flex-wrap gap-3 items-center admin-form">
           <span class="text-xs text-white/50">
             Pending: {{ pendingCount() }} · Approved: {{ approvedCount() }} · Rejected: {{ rejectedCount() }}
           </span>
