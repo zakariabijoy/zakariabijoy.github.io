@@ -32,7 +32,7 @@ export class ContactComponent {
 
   fieldError(name: 'firstName' | 'lastName' | 'email' | 'phone' | 'message'): string | null {
     const control = this.form.controls[name];
-    if (!control.invalid || (!control.touched && this.status() === 'idle')) return null;
+    if (!control.invalid || !control.touched) return null;
     if (control.hasError('required')) {
       return name === 'message' ? 'Please enter a message.' : 'This field is required.';
     }
