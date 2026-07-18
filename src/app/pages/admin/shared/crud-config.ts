@@ -1,4 +1,4 @@
-export type CrudFieldType = 'text' | 'textarea' | 'number' | 'toggle' | 'select' | 'lines';
+export type CrudFieldType = 'text' | 'textarea' | 'number' | 'toggle' | 'select' | 'lines' | 'images';
 
 export interface CrudField {
   key: string;
@@ -33,7 +33,12 @@ export const PROJECTS_CRUD: CrudConfig = {
     { key: 'subtitle', label: 'Subtitle', type: 'text' },
     { key: 'description', label: 'Description', type: 'textarea' },
     { key: 'tech', label: 'Technologies', type: 'lines', hint: 'One per line' },
-    { key: 'images', label: 'Image URLs', type: 'lines', hint: 'One per line, e.g. /assets/work-1.svg' },
+    {
+      key: 'images',
+      label: 'Images',
+      type: 'images',
+      hint: 'Upload to Supabase Storage, or paste URLs (one per line). Local /assets/... paths still work as fallbacks.',
+    },
     { key: 'live_url', label: 'Live URL', type: 'text' },
     { key: 'github_url', label: 'GitHub URL', type: 'text' },
     { key: 'sort_order', label: 'Sort order', type: 'number' },

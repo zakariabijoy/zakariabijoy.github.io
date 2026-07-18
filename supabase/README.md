@@ -32,7 +32,24 @@ the RLS policies effectively means "the admin".
    - `seed.sql` is idempotent for content tables (it truncates them first), so
      it can be re-run to reset content. It does **not** touch `contact_messages`.
 
-## 4. Production URL config
+## 4. Create Storage bucket
+
+1. **SQL Editor → New query** → paste the contents of [`storage.sql`](storage.sql) → **Run**.
+2. Confirm under **Storage** that the public bucket `portfolio-media` exists.
+
+Folder convention (enforced by the admin upload UI):
+
+| Path | Purpose |
+|---|---|
+| `avatar/` | Profile picture |
+| `resume/` | Resume PDF |
+| `projects/{projectId}/` | Project / work images |
+
+Policies: anonymous **read**; authenticated admin **insert / update / delete**.
+
+After this step, open `/admin` → Profile / Projects and upload files. Public pages prefer Storage URLs; local `/assets/...` remains the offline fallback.
+
+## 5. Production URL config
 
 **Authentication → URL Configuration** → set Site URL to
 `https://zakariabijoy.github.io` (safe default, even though the app uses
@@ -69,3 +86,9 @@ curl "https://xxxx.supabase.co/rest/v1/contact_messages?select=*" -H "apikey: <a
 | `education` | Degrees, certifications, courses, training | read |
 | `skills` | Skills grouped by category | read |
 | `contact_messages` | Contact form submissions | insert only |
+
+## Storage
+
+| Bucket | Purpose | Anon access |
+|---|---|---|
+| `portfolio-media` | Resume PDF, avatar, project images | read (public URLs) |

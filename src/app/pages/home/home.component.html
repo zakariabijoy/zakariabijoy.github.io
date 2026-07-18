@@ -19,7 +19,7 @@
 
       <!-- CTA Section -->
       <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-12 animate-fade-in-up" style="animation-delay: 0.8s;">
-        <a [href]="profile().resume_url"
+        <a [href]="profile().resume_url || '/assets/Md_Zakaria_Masud_Resume_SSE.pdf'"
            download="Md_Zakaria_Masud_Resume_SSE.pdf"
            class="btn-primary group"
            aria-label="Download my resume as a PDF">

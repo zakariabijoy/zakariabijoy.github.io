@@ -89,7 +89,7 @@
             </p>
           </div>
           
-          <a class="btn-primary mt-4 sm:mt-0" [href]="profile().resume_url" download>
+          <a class="btn-primary mt-4 sm:mt-0" [href]="profile().resume_url || '/assets/Md_Zakaria_Masud_Resume_SSE.pdf'" download>
             <span class="flex items-center gap-2">
               <i class="pi pi-download"></i>
               <span>Download CV</span>
@@ -197,7 +197,7 @@
               <div class="flex flex-col lg:flex-row gap-6 items-start">
                 <div class="flex-shrink-0">
                   <img
-                    [src]="profile().avatar_url || 'assets/profile.jpg'"
+                    [src]="profile().avatar_url || '/assets/profile.jpg'"
                     [alt]="profile().full_name"
                     class="w-24 h-24 rounded-full border-4 border-brand-400 shadow-lg object-cover">
                 </div>

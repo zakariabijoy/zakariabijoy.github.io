@@ -4,6 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { supabase } from '../../../core/supabase.client';
+import { MediaService } from '../../../core/media.service';
 import { Profile } from '../../../core/models';
 
 @Component({
@@ -58,13 +59,95 @@ import { Profile } from '../../../core/models';
           <label for="freelance_status" class="form-label">Freelance status</label>
           <input id="freelance_status" formControlName="freelance_status" class="form-input" placeholder="Available / Busy" />
         </div>
-        <div class="form-group">
-          <label for="resume_url" class="form-label">Resume URL</label>
-          <input id="resume_url" formControlName="resume_url" class="form-input" placeholder="https://" />
-        </div>
+
         <div class="form-group md:col-span-2">
-          <label for="avatar_url" class="form-label">Avatar URL</label>
-          <input id="avatar_url" formControlName="avatar_url" class="form-input" placeholder="https://" />
+          <label class="form-label">Avatar</label>
+          <div class="flex flex-col sm:flex-row gap-4 items-start">
+            @if (form.controls.avatar_url.value) {
+              <img
+                [src]="form.controls.avatar_url.value"
+                alt="Avatar preview"
+                class="w-24 h-24 rounded-full object-cover border border-white/15 shrink-0"
+              />
+            } @else {
+              <div class="w-24 h-24 rounded-full border border-dashed border-white/20 flex items-center justify-center text-white/40 text-xs shrink-0">
+                No photo
+              </div>
+            }
+            <div class="flex flex-col gap-2 min-w-0 flex-1">
+              <input
+                #avatarInput
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/svg+xml"
+                class="hidden"
+                (change)="onAvatarSelected($event)"
+              />
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="btn-send btn-send--sm !w-auto" [disabled]="uploadingAvatar()" (click)="avatarInput.click()">
+                  @if (uploadingAvatar()) {
+                    <span class="flex items-center gap-2">
+                      <span class="loading-spinner"></span>
+                      <span>Uploading...</span>
+                    </span>
+                  } @else {
+                    <span class="flex items-center gap-2">
+                      <i class="pi pi-upload"></i>
+                      <span>Upload photo</span>
+                    </span>
+                  }
+                </button>
+                @if (form.controls.avatar_url.value) {
+                  <button type="button" class="text-sm font-medium text-white/60 hover:text-white px-3 py-2 transition-colors" (click)="clearAvatar()">
+                    Clear
+                  </button>
+                }
+              </div>
+              @if (form.controls.avatar_url.value; as avatarUrl) {
+                <p class="form-hint break-all !mt-0">{{ avatarUrl }}</p>
+              } @else {
+                <p class="form-hint !mt-0">Falls back to /assets/profile.jpg on the public site when empty.</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group md:col-span-2">
+          <label class="form-label">Resume (PDF)</label>
+          <input
+            #resumeInput
+            type="file"
+            accept="application/pdf,.pdf"
+            class="hidden"
+            (change)="onResumeSelected($event)"
+          />
+          <div class="flex flex-wrap gap-2 items-center">
+            <button type="button" class="btn-send btn-send--sm !w-auto" [disabled]="uploadingResume()" (click)="resumeInput.click()">
+              @if (uploadingResume()) {
+                <span class="flex items-center gap-2">
+                  <span class="loading-spinner"></span>
+                  <span>Uploading...</span>
+                </span>
+              } @else {
+                <span class="flex items-center gap-2">
+                  <i class="pi pi-upload"></i>
+                  <span>Upload PDF</span>
+                </span>
+              }
+            </button>
+            @if (form.controls.resume_url.value; as resumeUrl) {
+              <a [href]="resumeUrl" target="_blank" rel="noopener" class="text-sm text-brand-400 hover:underline truncate max-w-full">
+                View current resume
+              </a>
+              <button type="button" class="text-sm font-medium text-white/60 hover:text-white px-3 py-2 transition-colors" (click)="clearResume()">
+                Clear
+              </button>
+            }
+          </div>
+          @if (form.controls.resume_url.value; as resumeUrl) {
+            <p class="form-hint break-all">{{ resumeUrl }}</p>
+          } @else {
+            <p class="form-hint">Falls back to /assets/Md_Zakaria_Masud_Resume_SSE.pdf on the public site when empty.</p>
+          }
         </div>
 
         <div class="form-group">
@@ -81,7 +164,7 @@ import { Profile } from '../../../core/models';
         </div>
 
         <div class="md:col-span-2 flex justify-end mt-2">
-          <button class="btn-send btn-send--sm !w-auto" type="submit" [disabled]="saving()" [class.loading]="saving()">
+          <button class="btn-send btn-send--sm !w-auto" type="submit" [disabled]="saving() || uploadingAvatar() || uploadingResume()" [class.loading]="saving()">
             @if (!saving()) {
               <span class="flex items-center gap-2">
                 <i class="pi pi-check"></i>
@@ -102,8 +185,11 @@ import { Profile } from '../../../core/models';
 export class ProfileEditorComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly toast = inject(MessageService);
+  private readonly media = inject(MediaService);
 
   readonly saving = signal(false);
+  readonly uploadingAvatar = signal(false);
+  readonly uploadingResume = signal(false);
 
   readonly form = this.fb.nonNullable.group({
     full_name: ['', Validators.required],
@@ -144,6 +230,82 @@ export class ProfileEditorComponent implements OnInit {
         resume_url: p.resume_url ?? '',
         avatar_url: p.avatar_url ?? '',
       });
+    }
+  }
+
+  async onAvatarSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    this.uploadingAvatar.set(true);
+    try {
+      const previous = this.form.controls.avatar_url.value;
+      const path = this.media.buildPath('avatar', file);
+      const { publicUrl } = await this.media.upload(path, file, 'image');
+      this.form.controls.avatar_url.setValue(publicUrl);
+
+      const oldPath = this.media.pathFromPublicUrl(previous);
+      if (oldPath && oldPath !== path) {
+        await this.media.remove([oldPath]).catch(() => undefined);
+      }
+      this.toast.add({ severity: 'success', summary: 'Avatar uploaded' });
+    } catch (err) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Upload failed',
+        detail: err instanceof Error ? err.message : 'Could not upload avatar',
+      });
+    } finally {
+      this.uploadingAvatar.set(false);
+    }
+  }
+
+  async onResumeSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    input.value = '';
+    if (!file) return;
+
+    this.uploadingResume.set(true);
+    try {
+      const previous = this.form.controls.resume_url.value;
+      const path = this.media.buildPath('resume', file);
+      const { publicUrl } = await this.media.upload(path, file, 'pdf');
+      this.form.controls.resume_url.setValue(publicUrl);
+
+      const oldPath = this.media.pathFromPublicUrl(previous);
+      if (oldPath && oldPath !== path) {
+        await this.media.remove([oldPath]).catch(() => undefined);
+      }
+      this.toast.add({ severity: 'success', summary: 'Resume uploaded' });
+    } catch (err) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Upload failed',
+        detail: err instanceof Error ? err.message : 'Could not upload resume',
+      });
+    } finally {
+      this.uploadingResume.set(false);
+    }
+  }
+
+  async clearAvatar() {
+    const previous = this.form.controls.avatar_url.value;
+    this.form.controls.avatar_url.setValue('');
+    const path = this.media.pathFromPublicUrl(previous);
+    if (path) {
+      await this.media.remove([path]).catch(() => undefined);
+    }
+  }
+
+  async clearResume() {
+    const previous = this.form.controls.resume_url.value;
+    this.form.controls.resume_url.setValue('');
+    const path = this.media.pathFromPublicUrl(previous);
+    if (path) {
+      await this.media.remove([path]).catch(() => undefined);
     }
   }
 
