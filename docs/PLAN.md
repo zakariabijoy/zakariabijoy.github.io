@@ -2,6 +2,8 @@
 
 Status snapshot as of 2026-07-18. This tracks what shipped, what's outstanding, and who built what — the project was worked on by both Claude Code and Cursor in parallel, and this doc exists to keep both sessions (and future ones) oriented.
 
+**Deployed.** Live at https://zakariabijoy.github.io/ as of commit `47482c9` via `npm run github-deploy`.
+
 ## 1. Original scope (Claude Code, this session) — DONE
 
 Supabase backend to replace hardcoded portfolio content, plus an admin CMS.
@@ -52,4 +54,4 @@ See also [`FULL-BLOG-FEATURE-PLAN.md`](FULL-BLOG-FEATURE-PLAN.md) for the origin
 
 ## 5. Next steps
 
-1. Deploy via `npm run github-deploy` when ready. Not run automatically — it pushes to the live `gh-pages` branch and needs explicit go-ahead.
+1. ~~Deploy via `npm run github-deploy`.~~ Done — live at https://zakariabijoy.github.io/.
