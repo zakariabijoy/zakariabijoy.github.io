@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
@@ -24,7 +24,7 @@ type Row = Record<string, unknown>;
   standalone: true,
   selector: 'app-admin-crud',
   imports: [
-    CommonModule, FormsModule, ReactiveFormsModule, TableModule, DialogModule, ButtonModule,
+    CommonModule, ReactiveFormsModule, TableModule, DialogModule, ButtonModule,
     InputNumberModule, SelectModule, ToggleSwitchModule, TagModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -75,14 +75,14 @@ type Row = Record<string, unknown>;
     </div>
 
     <p-dialog
-      [(visible)]="dialogVisible"
+      [visible]="dialogVisible()"
+      (visibleChange)="onDialogVisibleChange($event)"
       [modal]="true"
       [style]="{ width: '34rem', maxWidth: '95vw' }"
-      [header]="editingId ? 'Edit ' + config.title : 'New ' + config.title"
+      [header]="editingId() ? 'Edit ' + config.title : 'New ' + config.title"
       styleClass="admin-dialog"
-      (onHide)="form = null"
     >
-      @if (form; as f) {
+      @if (form(); as f) {
         <form [formGroup]="f" (ngSubmit)="save()" class="admin-form flex flex-col gap-4 pt-1">
           @for (field of config.fields; track field.key) {
             <div class="form-group">
@@ -149,9 +149,8 @@ type Row = Record<string, unknown>;
                       [id]="field.key"
                       class="form-textarea font-mono text-sm"
                       rows="3"
-                      [ngModel]="imageList(field.key).join('\n')"
-                      (ngModelChange)="setImageUrls(field.key, $event)"
-                      [ngModelOptions]="{ standalone: true }"
+                      [value]="imageList(field.key).join('\\n')"
+                      (input)="setImageUrls(field.key, $any($event.target).value)"
                       placeholder="One URL per line, e.g. /assets/work-1.svg"
                     ></textarea>
                   </div>
@@ -177,7 +176,7 @@ type Row = Record<string, unknown>;
           }
 
           <div class="flex justify-end gap-3 mt-2">
-            <button type="button" class="text-sm font-medium text-white/60 hover:text-white px-4 py-2 transition-colors" (click)="dialogVisible = false">
+            <button type="button" class="text-sm font-medium text-white/60 hover:text-white px-4 py-2 transition-colors" (click)="closeDialog()">
               Cancel
             </button>
             <button class="btn-send btn-send--sm !w-auto" type="submit" [disabled]="saving() || uploadingImages()" [class.loading]="saving()">
@@ -203,6 +202,7 @@ export class AdminCrudComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly media = inject(MediaService);
   private readonly toast = inject(MessageService);
+  private readonly cdr = inject(ChangeDetectorRef);
 
   config!: CrudConfig;
 
@@ -210,18 +210,18 @@ export class AdminCrudComponent implements OnInit {
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly uploadingImages = signal(false);
+  readonly dialogVisible = signal(false);
+  readonly editingId = signal<string | null>(null);
+  readonly form = signal<FormGroup | null>(null);
 
-  dialogVisible = false;
-  editingId: string | null = null;
   /** Stable id used for Storage paths when creating a new project. */
   private draftId: string | null = null;
-  form: FormGroup | null = null;
 
   ngOnInit(): void {
     // config via route data; component instance is reused between crud routes
     this.route.data.subscribe(data => {
       this.config = data['config'] as CrudConfig;
-      this.dialogVisible = false;
+      this.closeDialog();
       this.load();
     });
   }
@@ -242,7 +242,7 @@ export class AdminCrudComponent implements OnInit {
           value = Array.isArray(raw) ? raw.join('\n') : '';
           break;
         case 'images':
-          value = Array.isArray(raw) ? [...raw] : [];
+          value = Array.isArray(raw) ? [...(raw as string[])] : [];
           break;
         case 'number':
           value = raw ?? 0;
@@ -259,37 +259,51 @@ export class AdminCrudComponent implements OnInit {
   }
 
   openNew() {
-    this.editingId = null;
+    this.editingId.set(null);
     this.draftId = crypto.randomUUID();
-    this.form = this.buildForm();
-    this.dialogVisible = true;
+    this.form.set(this.buildForm());
+    this.dialogVisible.set(true);
+    this.cdr.markForCheck();
   }
 
   openEdit(row: Row) {
-    this.editingId = row['id'] as string;
+    this.editingId.set(row['id'] as string);
     this.draftId = null;
-    this.form = this.buildForm(row);
-    this.dialogVisible = true;
+    this.form.set(this.buildForm(row));
+    this.dialogVisible.set(true);
+    this.cdr.markForCheck();
+  }
+
+  onDialogVisibleChange(visible: boolean) {
+    if (!visible) this.closeDialog();
+    else this.dialogVisible.set(true);
+  }
+
+  closeDialog() {
+    this.dialogVisible.set(false);
+    this.form.set(null);
   }
 
   imageList(key: string): string[] {
-    const value = this.form?.get(key)?.value;
+    const value = this.form()?.get(key)?.value;
     return Array.isArray(value) ? value : [];
   }
 
   setImageUrls(key: string, text: string) {
     const urls = text.split('\n').map(s => s.trim()).filter(Boolean);
-    this.form?.get(key)?.setValue(urls);
+    this.form()?.get(key)?.setValue(urls);
+    this.cdr.markForCheck();
   }
 
   async onImagesSelected(key: string, event: Event) {
     const input = event.target as HTMLInputElement;
     const files = [...(input.files ?? [])];
     input.value = '';
-    if (!files.length || !this.form) return;
+    const currentForm = this.form();
+    if (!files.length || !currentForm) return;
 
-    const folderId = this.editingId ?? this.draftId ?? crypto.randomUUID();
-    if (!this.editingId && !this.draftId) this.draftId = folderId;
+    const folderId = this.editingId() ?? this.draftId ?? crypto.randomUUID();
+    if (!this.editingId() && !this.draftId) this.draftId = folderId;
 
     this.uploadingImages.set(true);
     try {
@@ -300,7 +314,7 @@ export class AdminCrudComponent implements OnInit {
         uploaded.push(publicUrl);
       }
       const current = this.imageList(key);
-      this.form.get(key)?.setValue([...current, ...uploaded]);
+      currentForm.get(key)?.setValue([...current, ...uploaded]);
       this.toast.add({
         severity: 'success',
         summary: uploaded.length === 1 ? 'Image uploaded' : `${uploaded.length} images uploaded`,
@@ -313,13 +327,15 @@ export class AdminCrudComponent implements OnInit {
       });
     } finally {
       this.uploadingImages.set(false);
+      this.cdr.markForCheck();
     }
   }
 
   async removeImage(key: string, index: number) {
-    const current = this.imageList(key);
+    const current = [...this.imageList(key)];
     const [removed] = current.splice(index, 1);
-    this.form?.get(key)?.setValue([...current]);
+    this.form()?.get(key)?.setValue(current);
+    this.cdr.markForCheck();
 
     const path = this.media.pathFromPublicUrl(removed);
     if (path) {
@@ -328,11 +344,12 @@ export class AdminCrudComponent implements OnInit {
   }
 
   async save() {
-    if (!this.form) return;
-    this.form.markAllAsTouched();
-    if (this.form.invalid) return;
+    const currentForm = this.form();
+    if (!currentForm) return;
+    currentForm.markAllAsTouched();
+    if (currentForm.invalid) return;
 
-    const value = this.form.getRawValue() as Row;
+    const value = currentForm.getRawValue() as Row;
     const row: Row = {};
     for (const field of this.config.fields) {
       const v = value[field.key];
@@ -345,8 +362,9 @@ export class AdminCrudComponent implements OnInit {
       }
     }
 
-    if (this.editingId) {
-      row['id'] = this.editingId;
+    const editId = this.editingId();
+    if (editId) {
+      row['id'] = editId;
     } else if (this.draftId && this.config.fields.some(f => f.type === 'images')) {
       // Keep Storage folder and DB id aligned for new projects with uploads.
       row['id'] = this.draftId;
@@ -356,7 +374,7 @@ export class AdminCrudComponent implements OnInit {
     const ok = await this.adminData.upsert(this.config.table, row);
     this.saving.set(false);
     if (ok) {
-      this.dialogVisible = false;
+      this.closeDialog();
       await this.load();
     }
   }
