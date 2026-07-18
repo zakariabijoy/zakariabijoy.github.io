@@ -33,6 +33,7 @@ import { BlogComment, BlogCommentStatus } from '../../../core/models';
             optionValue="value"
             placeholder="Filter"
             styleClass="w-40"
+            appendTo="body"
           />
         </div>
       </div>

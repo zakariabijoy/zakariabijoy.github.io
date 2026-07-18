@@ -56,6 +56,7 @@ import { estimateReadingTimeMinutes, sanitizeBlogHtml, slugify } from '../../../
               optionLabel="label"
               optionValue="value"
               styleClass="w-full"
+              appendTo="body"
             />
           </div>
 
