@@ -3,7 +3,7 @@
 
 -- ============================================================
 -- Bucket: portfolio-media (public read)
--- Folders: avatar/, resume/, projects/{projectId}/
+-- Folders: avatar/, resume/, projects/{projectId}/, blog/{postId}/
 -- ============================================================
 
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)

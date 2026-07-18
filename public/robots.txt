@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://zakariabijoy.github.io/sitemap.xml

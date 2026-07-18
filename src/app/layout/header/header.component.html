@@ -23,6 +23,11 @@
          class="nav-link">
         <span>Work</span>
       </a>
+      <a routerLink="/blog" 
+         routerLinkActive="nav-active" 
+         class="nav-link">
+        <span>Blog</span>
+      </a>
       <a routerLink="/contact" 
          routerLinkActive="nav-active" 
          class="nav-link">
@@ -72,6 +77,13 @@
          (click)="closeMobileMenu()">
         <i class="pi pi-briefcase"></i>
         <span>Work</span>
+      </a>
+      <a routerLink="/blog" 
+         routerLinkActive="nav-active" 
+         class="mobile-nav-link"
+         (click)="closeMobileMenu()">
+        <i class="pi pi-book"></i>
+        <span>Blog</span>
       </a>
       <a routerLink="/contact" 
          routerLinkActive="nav-active" 

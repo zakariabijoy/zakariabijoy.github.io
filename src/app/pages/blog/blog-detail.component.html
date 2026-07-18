@@ -1,0 +1,188 @@
+<section class="container py-16 md:py-24">
+  @if (loading()) {
+    <div class="glass-card p-10 text-center text-muted">Loading article…</div>
+  } @else if (notFound()) {
+    <div class="glass-card p-10 text-center max-w-xl mx-auto">
+      <h1 class="text-2xl font-bold mb-3">Post not found</h1>
+      <p class="text-muted mb-6">This article may be unpublished or the link is incorrect.</p>
+      <button type="button" class="btn-primary" (click)="goHome()">Back to blog</button>
+    </div>
+  } @else if (post(); as article) {
+    <div class="article-layout">
+      <article class="article-main">
+        <nav class="text-sm text-muted mb-6 flex flex-wrap gap-2 items-center">
+          <a routerLink="/" class="hover:text-brand-300">Home</a>
+          <span>/</span>
+          <a routerLink="/blog" class="hover:text-brand-300">Blog</a>
+          <span>/</span>
+          <span class="text-fg truncate max-w-[12rem] md:max-w-none">{{ article.title }}</span>
+        </nav>
+
+        <header class="mb-8">
+          <div class="flex flex-wrap gap-2 mb-4">
+            @for (tag of article.tags || []; track tag.slug) {
+              <a [routerLink]="['/blog/tag', tag.slug]" class="mini-tag">{{ tag.name }}</a>
+            }
+          </div>
+          <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">{{ article.title }}</h1>
+          <div class="meta-row mb-6">
+            @if (article.published_at) {
+              <time [attr.datetime]="article.published_at">{{ article.published_at | date: 'longDate' }}</time>
+              <span>·</span>
+            }
+            <span>{{ article.reading_time_minutes }} min read</span>
+          </div>
+          @if (article.cover_image_url) {
+            <img
+              [src]="article.cover_image_url"
+              [alt]="article.title"
+              class="article-cover"
+            />
+          }
+        </header>
+
+        @if (contentHtml(); as html) {
+          <div class="prose-blog" [innerHTML]="html"></div>
+        }
+
+        <div class="reactions mt-10">
+          <p class="text-sm font-semibold mb-3">React to this post</p>
+          <div class="flex flex-wrap gap-2">
+            @for (r of reactionTypes; track r.type) {
+              <button
+                type="button"
+                class="reaction-btn"
+                [class.reaction-btn-active]="isMine(r.type)"
+                [disabled]="reacting() || !article.id || article.id.startsWith('fallback')"
+                (click)="toggleReaction(r.type)"
+              >
+                <i [class]="r.icon" aria-hidden="true"></i>
+                <span>{{ r.label }}</span>
+                <span class="count">{{ reactions()[r.type] }}</span>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="share-row mt-8">
+          <span class="text-sm text-muted mr-2">Share:</span>
+          <a
+            class="share-link"
+            [href]="twitterShareUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >X / Twitter</a>
+          <a
+            class="share-link"
+            [href]="linkedInShareUrl()"
+            target="_blank"
+            rel="noopener noreferrer"
+          >LinkedIn</a>
+          <button
+            type="button"
+            class="share-link"
+            (click)="copyLink()"
+          >Copy link</button>
+        </div>
+
+        <section class="comments mt-12" id="comments">
+          <h2 class="text-xl font-bold mb-4">Comments</h2>
+
+          @if (!comments().length) {
+            <p class="text-sm text-muted mb-6">No approved comments yet. Be the first to leave one.</p>
+          } @else {
+            <ul class="comment-list mb-8">
+              @for (c of comments(); track c.id) {
+                <li class="comment-item">
+                  <div class="flex items-baseline justify-between gap-3 mb-1">
+                    <strong>{{ c.author_name }}</strong>
+                    @if (c.created_at) {
+                      <time class="text-xs text-muted" [attr.datetime]="c.created_at">
+                        {{ c.created_at | date: 'mediumDate' }}
+                      </time>
+                    }
+                  </div>
+                  <p class="text-sm whitespace-pre-wrap">{{ c.body }}</p>
+                </li>
+              }
+            </ul>
+          }
+
+          <form class="comment-form glass-card p-5" [formGroup]="commentForm" (ngSubmit)="submitComment()">
+            <h3 class="font-semibold mb-1">Leave a comment</h3>
+            <p class="text-xs text-muted mb-4">
+              Comments are moderated before they appear. Your email is never shown publicly.
+            </p>
+
+            <!-- Honeypot -->
+            <div class="hp" aria-hidden="true">
+              <label for="website">Website</label>
+              <input id="website" type="text" formControlName="website" tabindex="-1" autocomplete="off" />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label class="form-label" for="authorName">Name *</label>
+                <input id="authorName" class="form-input" formControlName="authorName" />
+              </div>
+              <div>
+                <label class="form-label" for="authorEmail">Email *</label>
+                <input id="authorEmail" class="form-input" type="email" formControlName="authorEmail" />
+              </div>
+            </div>
+            <div class="mb-4">
+              <label class="form-label" for="body">Comment *</label>
+              <textarea id="body" class="form-textarea" rows="4" formControlName="body"></textarea>
+            </div>
+
+            @if (commentMessage()) {
+              <p class="text-sm text-brand-300 mb-3">{{ commentMessage() }}</p>
+            }
+            @if (commentError()) {
+              <p class="text-sm text-red-400 mb-3">{{ commentError() }}</p>
+            }
+
+            <button
+              type="submit"
+              class="btn-primary"
+              [disabled]="commentForm.invalid || commentSubmitting()"
+            >
+              @if (commentSubmitting()) { Submitting… } @else { Submit comment }
+            </button>
+          </form>
+        </section>
+      </article>
+
+      <aside class="article-aside">
+        @if (toc().length) {
+          <div class="toc-card">
+            <p class="toc-title">On this page</p>
+            <nav>
+              <ul>
+                @for (h of toc(); track h.id) {
+                  <li [class.toc-h3]="h.level === 3">
+                    <a [href]="'#' + h.id">{{ h.text }}</a>
+                  </li>
+                }
+              </ul>
+            </nav>
+          </div>
+        }
+
+        @if (related().length) {
+          <div class="related-card">
+            <p class="toc-title">Related posts</p>
+            <ul class="related-list">
+              @for (r of related(); track r.slug) {
+                <li>
+                  <a [routerLink]="['/blog', r.slug]">{{ r.title }}</a>
+                  <span class="text-xs text-muted">{{ r.reading_time_minutes }} min</span>
+                </li>
+              }
+            </ul>
+          </div>
+        }
+      </aside>
+    </div>
+  }
+</section>

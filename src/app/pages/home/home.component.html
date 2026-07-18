@@ -160,6 +160,19 @@
         </div>
       </div>
 
+      <!-- Latest blog post -->
+      @if (latestPost(); as post) {
+        <a [routerLink]="['/blog', post.slug]" class="bento-card bento-span-2 group cursor-pointer block">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-xs uppercase tracking-wider text-brand-400 font-semibold">Latest Post</span>
+            <i class="pi pi-arrow-up-right text-brand-400 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true"></i>
+          </div>
+          <h3 class="text-lg font-bold mb-2 leading-snug">{{ post.title }}</h3>
+          <p class="text-sm text-gray-400 line-clamp-3 mb-3">{{ post.excerpt }}</p>
+          <span class="text-xs text-brand-300">{{ post.reading_time_minutes }} min read →</span>
+        </a>
+      }
+
       <!-- Availability -->
       <div class="bento-card bento-span-2">
         <span class="text-xs uppercase tracking-wider text-brand-400 font-semibold block mb-3">Availability</span>

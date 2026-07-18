@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, AfterViewInit, ElementRef, computed
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { PortfolioDataService } from '../../core/portfolio-data.service';
+import { BlogDataService } from '../../core/blog-data.service';
 
 @Component({
   selector: 'app-home',
@@ -13,12 +14,14 @@ import { PortfolioDataService } from '../../core/portfolio-data.service';
 })
 export class HomeComponent implements AfterViewInit {
   private readonly data = inject(PortfolioDataService);
+  private readonly blog = inject(BlogDataService);
   private readonly elementRef = inject(ElementRef);
 
   readonly profile = this.data.profile;
   readonly socialLinks = this.data.socialLinks;
 
   readonly featuredProject = computed(() => this.data.projects()[0]);
+  readonly latestPost = computed(() => this.blog.latestPosts()[0] ?? null);
 
   readonly coreSkills = computed(() =>
     this.data.skills()

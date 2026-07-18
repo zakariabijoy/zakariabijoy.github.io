@@ -89,3 +89,64 @@ export interface ContactMessage {
   is_read?: boolean;
   created_at?: string;
 }
+
+export type BlogPostStatus = 'draft' | 'published' | 'scheduled';
+export type BlogCommentStatus = 'pending' | 'approved' | 'rejected';
+export type BlogReactionType = 'like' | 'insightful' | 'celebrate';
+
+export interface BlogTag {
+  id?: string;
+  name: string;
+  slug: string;
+  created_at?: string;
+}
+
+export interface BlogPost {
+  id?: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content_html: string;
+  cover_image_url: string | null;
+  status: BlogPostStatus;
+  published_at: string | null;
+  seo_title: string | null;
+  seo_description: string | null;
+  reading_time_minutes: number;
+  created_at?: string;
+  updated_at?: string;
+  /** Populated by joins / client enrichment — not a DB column. */
+  tags?: BlogTag[];
+}
+
+export interface BlogComment {
+  id?: string;
+  post_id: string;
+  author_name: string;
+  author_email: string;
+  body: string;
+  status: BlogCommentStatus;
+  created_at?: string;
+}
+
+export interface BlogReaction {
+  id?: string;
+  post_id: string;
+  reaction_type: BlogReactionType;
+  visitor_key: string;
+  created_at?: string;
+}
+
+export interface BlogReactionSummary {
+  like: number;
+  insightful: number;
+  celebrate: number;
+  mine: BlogReactionType[];
+}
+
+export interface BlogPostListResult {
+  posts: BlogPost[];
+  total: number;
+  page: number;
+  pageSize: number;
+}

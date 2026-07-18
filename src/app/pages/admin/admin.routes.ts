@@ -5,6 +5,9 @@ import { AdminLayoutComponent } from './layout/admin-layout.component';
 import { AdminCrudComponent } from './shared/admin-crud.component';
 import { MessagesComponent } from './messages/messages.component';
 import { ProfileEditorComponent } from './profile-editor/profile-editor.component';
+import { BlogPostsComponent } from './blog-posts/blog-posts.component';
+import { BlogPostEditorComponent } from './blog-post-editor/blog-post-editor.component';
+import { BlogCommentsComponent } from './blog-comments/blog-comments.component';
 import {
   EDUCATION_CRUD,
   EXPERIENCE_CRUD,
@@ -23,6 +26,10 @@ export const ADMIN_ROUTES: Routes = [
       { path: '', redirectTo: 'messages', pathMatch: 'full' },
       { path: 'messages', component: MessagesComponent, title: 'Messages | Admin' },
       { path: 'profile', component: ProfileEditorComponent, title: 'Profile | Admin' },
+      { path: 'posts', component: BlogPostsComponent, title: 'Blog Posts | Admin' },
+      { path: 'posts/new', component: BlogPostEditorComponent, title: 'New Post | Admin' },
+      { path: 'posts/:id', component: BlogPostEditorComponent, title: 'Edit Post | Admin' },
+      { path: 'comments', component: BlogCommentsComponent, title: 'Comments | Admin' },
       { path: 'projects', component: AdminCrudComponent, data: { config: PROJECTS_CRUD }, title: 'Projects | Admin' },
       { path: 'experience', component: AdminCrudComponent, data: { config: EXPERIENCE_CRUD }, title: 'Experience | Admin' },
       { path: 'education', component: AdminCrudComponent, data: { config: EDUCATION_CRUD }, title: 'Education | Admin' },
@@ -31,3 +38,4 @@ export const ADMIN_ROUTES: Routes = [
     ],
   },
 ];
+

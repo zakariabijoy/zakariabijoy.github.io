@@ -124,3 +124,7 @@ create policy "anyone can insert" on public.contact_messages for insert to anon,
 create policy "admin read" on public.contact_messages for select to authenticated using (true);
 create policy "admin update" on public.contact_messages for update to authenticated using (true) with check (true);
 create policy "admin delete" on public.contact_messages for delete to authenticated using (true);
+
+-- ============================================================
+-- Blog tables live in blog.sql (run after this file).
+-- ============================================================

@@ -62,6 +62,8 @@ export class AdminLayoutComponent {
   readonly nav = [
     { path: 'messages', label: 'Messages', icon: 'pi pi-inbox' },
     { path: 'profile', label: 'Profile', icon: 'pi pi-user' },
+    { path: 'posts', label: 'Blog Posts', icon: 'pi pi-book' },
+    { path: 'comments', label: 'Comments', icon: 'pi pi-comments' },
     { path: 'projects', label: 'Projects', icon: 'pi pi-briefcase' },
     { path: 'experience', label: 'Experience', icon: 'pi pi-building' },
     { path: 'education', label: 'Education', icon: 'pi pi-graduation-cap' },
