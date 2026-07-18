@@ -159,7 +159,7 @@ type Row = Record<string, unknown>;
                   <p-inputnumber [inputId]="field.key" [formControlName]="field.key" [showButtons]="true" styleClass="w-full" />
                 }
                 @case ('select') {
-                  <p-select [inputId]="field.key" [formControlName]="field.key" [options]="field.options" styleClass="w-full" />
+                  <p-select [inputId]="field.key" [formControlName]="field.key" [options]="field.options" styleClass="w-full" appendTo="body" />
                 }
                 @case ('toggle') {
                   <p-toggleswitch [inputId]="field.key" [formControlName]="field.key" />
